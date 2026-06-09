@@ -1,13 +1,13 @@
 const IMAGES = {
-  heroIllustration: 'http://localhost:3845/assets/791f1247162e4cd368f67e20999b40cd5b69f747.png',
-  heroBookStack: 'http://localhost:3845/assets/942e1443a142b963c32fb9cabfd2eeda50aefa4d.png',
-  openBook1: 'http://localhost:3845/assets/26da68eb1c67f115ebcb35ba75a9a9907f502fbb.png',
-  openBook2: 'http://localhost:3845/assets/9f49396dc481e19b8ffd992b96115e28055d96f9.png',
-  openBook3: 'http://localhost:3845/assets/9530d7b90fd679ea0081fa564bfb986e1b2aeb11.png',
-  authorIllustration: 'http://localhost:3845/assets/77330bd9cdb8f5d5a65b2ad0cff42c5c0fd13c63.png',
-  shopCover1: 'http://localhost:3845/assets/7523a1a6d4856f63b7ded23732af64655458017e.png',
-  shopCover2: 'http://localhost:3845/assets/5f80cf09a1fa8d51b64a741b190ac71e2eb66d5c.png',
-  socialIcons: 'http://localhost:3845/assets/422b5dc40c4112dcdb6e3d043470c0a64143f92e.svg',
+  heroIllustration: '/images/hero-illustration.png',
+  heroBookStack: '/images/hero-book-stack.png',
+  openBook1: '/images/open-book-1.png',
+  openBook2: '/images/open-book-2.png',
+  openBook3: '/images/open-book-3.png',
+  authorIllustration: '/images/author-illustration.png',
+  shopCover1: '/images/shop-cover-1.png',
+  shopCover2: '/images/shop-cover-2.png',
+  socialIcons: '/images/social-icons.svg',
 }
 
 const QUOTES = [
