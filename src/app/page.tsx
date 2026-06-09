@@ -8,6 +8,7 @@ const IMAGES = {
   shopCover1: '/images/shop-cover-1.png',
   shopCover2: '/images/shop-cover-2.png',
   socialIcons: '/images/social-icons.svg',
+  characterIllustration: '/images/character-illustration.svg',
 }
 
 const QUOTES = [
@@ -128,6 +129,15 @@ export default function Page() {
             className="w-full h-full object-cover"
           />
         </div>
+      </section>
+
+      {/* Character illustration divider */}
+      <section className="bg-[#f7f3ed] flex justify-center py-8">
+        <img
+          src={IMAGES.characterIllustration}
+          alt="Ilustrácia postavy"
+          className="h-56"
+        />
       </section>
 
       {/* Bullet Section 1 */}
