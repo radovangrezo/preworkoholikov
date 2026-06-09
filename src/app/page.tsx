@@ -264,10 +264,10 @@ export default function Page() {
 
       {/* Footer */}
       <footer className="bg-black w-full flex justify-center items-center gap-4 py-6">
-        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+        <a href="https://facebook.com/preworkoholikov" target="_blank" rel="noopener noreferrer">
           <img src={IMAGES.iconFacebook} alt="Facebook" style={{ width: '49px', height: '49px' }} />
         </a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.instagram.com/preworkoholikov" target="_blank" rel="noopener noreferrer">
           <img src={IMAGES.iconInstagram} alt="Instagram" style={{ width: '49px', height: '49px' }} />
         </a>
         <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">
