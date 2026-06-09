@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# env files
+.env
+.env.local
+.env*.local
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Claude
+SKILL.md
+claude.md
