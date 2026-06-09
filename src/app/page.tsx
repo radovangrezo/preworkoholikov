@@ -137,7 +137,7 @@ export default function Page() {
         <img
           src={IMAGES.characterIllustration}
           alt="Ilustrácia postavy"
-          className="h-56"
+          style={{ height: '220px', width: '213px' }}
         />
       </section>
 
@@ -202,7 +202,7 @@ export default function Page() {
         <img
           src={IMAGES.bookIllustration}
           alt="Ilustrácia knihy"
-          className="h-56"
+          style={{ height: '220px', width: '225px' }}
         />
       </section>
 
