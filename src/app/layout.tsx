@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Rozprávky pre workoholikov',
-  description: 'Kniha Radovana Andreja Grežu – trpko-smiešne rozprávky o pracovnom živote.',
+  description: '42 príbehov o sebaklamoch, ktoré si nahovárame, aby sme v kancelárii nevyskočili z okna',
   icons: {
     icon: '/images/favico.svg',
   },
