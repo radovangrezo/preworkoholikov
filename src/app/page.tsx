@@ -7,7 +7,9 @@ const IMAGES = {
   authorIllustration: '/images/author-illustration.png',
   shopCover1: '/images/shop-cover-1.png',
   shopCover2: '/images/shop-cover-2.png',
-  socialIcons: '/images/social-icons.svg',
+  iconFacebook: '/images/icon-facebook.svg',
+  iconInstagram: '/images/icon-instagram.svg',
+  iconTiktok: '/images/icon-tiktok.svg',
   characterIllustration: '/images/character-illustration.svg',
   bookIllustration: '/images/book-illustration.svg',
 }
@@ -261,12 +263,16 @@ export default function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black w-full flex justify-center items-center py-6">
-        <img
-          src={IMAGES.socialIcons}
-          alt="Sociálne siete"
-          className="h-12"
-        />
+      <footer className="bg-black w-full flex justify-center items-center gap-4 py-6">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <img src={IMAGES.iconFacebook} alt="Facebook" style={{ width: '49px', height: '49px' }} />
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <img src={IMAGES.iconInstagram} alt="Instagram" style={{ width: '49px', height: '49px' }} />
+        </a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">
+          <img src={IMAGES.iconTiktok} alt="TikTok" style={{ width: '49px', height: '49px' }} />
+        </a>
       </footer>
     </main>
   )
