@@ -79,15 +79,6 @@ function QuoteCard({ text, author, role, link }: (typeof QUOTES)[0]) {
 export default function Page() {
   return (
     <main className="bg-[#f7f3ed] min-h-screen">
-      {/* Navbar */}
-      <nav className="bg-black w-full h-14 flex items-center justify-end px-8">
-        <div className="flex gap-8 text-[#f7f3ed] text-lg font-bold">
-          <a href="#about" className="hover:text-[#e5a624] transition-colors">About the Book</a>
-          <a href="#buy" className="hover:text-[#e5a624] transition-colors">Where to Buy</a>
-          <a href="#author" className="hover:text-[#e5a624] transition-colors">Author</a>
-        </div>
-      </nav>
-
       {/* Hero */}
       <section className="flex w-full" style={{ maxHeight: '522px' }}>
         <div className="w-[58%] overflow-hidden">
