@@ -48,16 +48,16 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
       : 'bg-[#e5a624] text-white'
 
   return (
-    <section className="bg-[#f7f3ed] py-12 flex flex-col items-center gap-4">
-      <div className="flex items-baseline gap-3">
-        <span className="text-[60px] font-bold leading-none text-black">€19,99</span>
-        <span className="text-2xl font-light text-black">(na sklade)</span>
+    <section className="bg-[#f7f3ed] py-10 md:py-12 flex flex-col items-center gap-4 px-6">
+      <div className="flex items-baseline gap-3 flex-wrap justify-center">
+        <span className="text-5xl md:text-[60px] font-bold leading-none text-black">€19,99</span>
+        <span className="text-xl md:text-2xl font-light text-black">(na sklade)</span>
       </div>
       <a
         href="https://martinus.sk"
         target="_blank"
         rel="noopener noreferrer"
-        className={`${btnClass} rounded-full px-10 py-4 text-xl font-bold no-underline`}
+        className={`${btnClass} rounded-full px-8 md:px-10 py-4 text-lg md:text-xl font-bold no-underline text-center`}
       >
         Predobjednať na Martinus.sk
       </a>
@@ -67,9 +67,9 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
 
 function QuoteCard({ text, author, role, link }: (typeof QUOTES)[0]) {
   return (
-    <div className="bg-white rounded-[20px] p-8 flex flex-col gap-2 flex-1">
+    <div className="bg-white rounded-[20px] p-6 md:p-8 flex flex-col gap-2">
       <span className="text-[#e5a624] text-6xl font-bold leading-none">&ldquo;</span>
-      <p className="text-base italic font-light text-black leading-5 flex-1">{text}</p>
+      <p className="text-sm md:text-base italic font-light text-black leading-5 flex-1">{text}</p>
       <p className="text-sm font-medium italic text-black mt-2">
         {author},{' '}
         <a href={link} target="_blank" rel="noopener noreferrer" className="underline">
@@ -84,15 +84,15 @@ export default function Page() {
   return (
     <main className="bg-[#f7f3ed] min-h-screen">
       {/* Hero */}
-      <section className="flex w-full" style={{ maxHeight: '522px' }}>
-        <div className="w-[58%] overflow-hidden">
+      <section className="flex flex-col md:flex-row w-full">
+        <div className="w-full md:w-[58%] overflow-hidden" style={{ maxHeight: '522px' }}>
           <img
             src={IMAGES.heroIllustration}
             alt="Rozprávky pre workoholikov – ilustrácia"
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="w-[42%] overflow-hidden">
+        <div className="w-full md:w-[42%] overflow-hidden" style={{ maxHeight: '360px', minHeight: '220px' }}>
           <img
             src={IMAGES.heroBookStack}
             alt="Rozprávky pre workoholikov – kniha"
@@ -105,8 +105,8 @@ export default function Page() {
       <PriceCta buttonColor="yellow" />
 
       {/* Testimonials */}
-      <section className="bg-[#f7f3ed] px-5 pb-12">
-        <div className="flex gap-5 max-w-[1366px] mx-auto">
+      <section className="bg-[#f7f3ed] px-5 pb-10 md:pb-12">
+        <div className="flex flex-col md:flex-row gap-5 max-w-[1366px] mx-auto">
           {QUOTES.map((q, i) => (
             <QuoteCard key={i} {...q} />
           ))}
@@ -114,9 +114,9 @@ export default function Page() {
       </section>
 
       {/* Book Section 1 — About the book */}
-      <section id="about" className="flex w-full">
-        <div className="w-1/2 bg-white flex items-center px-[134px] py-12">
-          <p className="text-2xl text-black leading-relaxed">
+      <section id="about" className="flex flex-col md:flex-row w-full">
+        <div className="w-full md:w-1/2 bg-white flex items-center px-8 md:px-[134px] py-10 md:py-12">
+          <p className="text-xl md:text-2xl text-black leading-relaxed">
             Baví vás vaša práca? Milujete svojich kolegov? Máte skvelého šéfa? Považujete firmu, v
             ktorej pracujete, za stelesnené dobro a dar ľudstvu?
             <br />
@@ -125,7 +125,7 @@ export default function Page() {
             ste konečne vytriezveli.
           </p>
         </div>
-        <div className="w-1/2 overflow-hidden" style={{ maxHeight: '435px' }}>
+        <div className="w-full md:w-1/2 overflow-hidden" style={{ maxHeight: '435px', minHeight: '260px' }}>
           <img
             src={IMAGES.openBook1}
             alt="Otvorená kniha"
@@ -139,21 +139,21 @@ export default function Page() {
         <img
           src={IMAGES.characterIllustration}
           alt="Ilustrácia postavy"
-          style={{ height: '220px', width: '213px' }}
+          style={{ height: '180px', width: '174px' }}
         />
       </section>
 
       {/* Bullet Section 1 */}
-      <section className="flex w-full">
-        <div className="w-1/2 overflow-hidden" style={{ maxHeight: '435px' }}>
+      <section className="flex flex-col md:flex-row w-full">
+        <div className="w-full md:w-1/2 overflow-hidden order-2 md:order-1" style={{ maxHeight: '435px', minHeight: '260px' }}>
           <img
             src={IMAGES.openBook2}
             alt="Rozprávky pre workoholikov – ilustrovaná postava"
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="w-1/2 bg-[#f7f3ed] flex items-center px-16 py-12">
-          <div className="text-2xl text-black">
+        <div className="w-full md:w-1/2 bg-[#f7f3ed] flex items-center px-8 md:px-16 py-10 md:py-12 order-1 md:order-2">
+          <div className="text-xl md:text-2xl text-black">
             <p className="font-bold mb-4">
               V 42 krátkych príbehoch nájdete všetko, čo si o práci myslíte, ale nemôžete povedať
               nahlas, pretože musíte splácať hypotéku:
@@ -175,9 +175,9 @@ export default function Page() {
       <PriceCta buttonColor="pink" />
 
       {/* Bullet Section 2 */}
-      <section className="flex w-full">
-        <div className="w-1/2 bg-white flex items-center px-[134px] py-12">
-          <div className="text-2xl text-black">
+      <section className="flex flex-col md:flex-row w-full">
+        <div className="w-full md:w-1/2 bg-white flex items-center px-8 md:px-[134px] py-10 md:py-12">
+          <div className="text-xl md:text-2xl text-black">
             <p className="font-bold mb-4">Prečítajte si trpko-smiešnu pravdu o:</p>
             <ul className="list-disc pl-8 space-y-1">
               <li>produktivite práce z domu,</li>
@@ -190,7 +190,7 @@ export default function Page() {
             </ul>
           </div>
         </div>
-        <div className="w-1/2 overflow-hidden" style={{ maxHeight: '435px' }}>
+        <div className="w-full md:w-1/2 overflow-hidden" style={{ maxHeight: '435px', minHeight: '260px' }}>
           <img
             src={IMAGES.openBook3}
             alt="Otvorená kniha"
@@ -204,21 +204,21 @@ export default function Page() {
         <img
           src={IMAGES.bookIllustration}
           alt="Ilustrácia knihy"
-          style={{ height: '220px', width: '225px' }}
+          style={{ height: '180px', width: '184px' }}
         />
       </section>
 
       {/* Author Section */}
-      <section id="author" className="flex w-full">
-        <div className="w-1/2 overflow-hidden" style={{ maxHeight: '435px' }}>
+      <section id="author" className="flex flex-col md:flex-row w-full">
+        <div className="w-full md:w-1/2 overflow-hidden" style={{ maxHeight: '435px', minHeight: '260px' }}>
           <img
             src={IMAGES.authorIllustration}
             alt="Radovan Andrej Grežo"
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="w-1/2 bg-[#f7f3ed] flex items-center px-16 py-12">
-          <div className="text-2xl text-black">
+        <div className="w-full md:w-1/2 bg-[#f7f3ed] flex items-center px-8 md:px-16 py-10 md:py-12">
+          <div className="text-xl md:text-2xl text-black">
             <p className="font-bold mb-4">Radovan Andrej Grežo</p>
             <p className="leading-relaxed">
               vydal pred Rozprávkami pre workoholikov iba vtipný Demotivačný diár pre rok 2021.
@@ -234,26 +234,26 @@ export default function Page() {
       <PriceCta buttonColor="yellow" />
 
       {/* Where to Buy */}
-      <section id="buy" className="bg-[#f7f3ed] py-12 px-5">
-        <div className="flex gap-5 max-w-[1366px] mx-auto">
+      <section id="buy" className="bg-[#f7f3ed] py-10 md:py-12 px-5">
+        <div className="flex flex-col md:flex-row gap-5 max-w-[1366px] mx-auto">
           {SHOP_BOOKS.map((book, i) => (
             <div
               key={i}
               className="bg-white rounded-[20px] flex-1 flex flex-col items-center pb-8 overflow-hidden"
             >
-              <div className="w-full h-[313px] overflow-hidden">
+              <div className="w-full overflow-hidden" style={{ maxHeight: '313px', minHeight: '200px' }}>
                 <img
                   src={book.cover}
                   alt={`Kniha ${i + 1}`}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <p className="text-[32px] font-bold text-black mt-6 mb-4">{book.price}</p>
+              <p className="text-2xl md:text-[32px] font-bold text-black mt-6 mb-4">{book.price}</p>
               <a
                 href="https://martinus.sk"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#e5a624] text-black rounded-full px-14 py-3 text-2xl font-bold"
+                className="bg-[#e5a624] text-black rounded-full px-14 py-3 text-xl md:text-2xl font-bold no-underline"
               >
                 Kúpiť
               </a>
