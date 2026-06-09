@@ -4,6 +4,9 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Rozprávky pre workoholikov',
   description: 'Kniha Radovana Andreja Grežu – trpko-smiešne rozprávky o pracovnom živote.',
+  icons: {
+    icon: '/images/favico.svg',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
