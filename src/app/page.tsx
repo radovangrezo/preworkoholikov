@@ -53,7 +53,7 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
         href="https://martinus.sk"
         target="_blank"
         rel="noopener noreferrer"
-        className={`${btnClass} rounded-full px-10 py-4 text-xl font-bold underline`}
+        className={`${btnClass} rounded-full px-10 py-4 text-xl font-bold no-underline`}
       >
         Predobjednať na Martinus.sk
       </a>
