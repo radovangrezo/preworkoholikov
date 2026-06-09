@@ -84,15 +84,15 @@ export default function Page() {
   return (
     <main className="bg-[#f7f3ed] min-h-screen">
       {/* Hero */}
-      <section className="flex flex-col md:flex-row w-full">
-        <div className="w-full md:w-[58%] overflow-hidden" style={{ maxHeight: '522px' }}>
+      <section className="flex flex-col md:flex-row w-full md:h-[522px]">
+        <div className="w-full md:w-[58%] overflow-hidden">
           <img
             src={IMAGES.heroIllustration}
             alt="Rozprávky pre workoholikov – ilustrácia"
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="w-full md:w-[42%] overflow-hidden" style={{ maxHeight: '360px', minHeight: '220px' }}>
+        <div className="w-full md:w-[42%] overflow-hidden" style={{ minHeight: '220px' }}>
           <img
             src={IMAGES.heroBookStack}
             alt="Rozprávky pre workoholikov – kniha"
