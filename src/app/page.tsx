@@ -83,7 +83,7 @@ function QuoteCard({ text, author, role, link }: (typeof QUOTES)[0]) {
 export default function Page() {
   return (
     <main className="bg-[#f7f3ed] min-h-screen">
-      {/* Hero */}
+      {/* Hero — illustration */}
       <section className="flex flex-col md:flex-row w-full md:h-[522px]">
         <div className="w-full md:w-[58%] overflow-hidden">
           <img
@@ -92,7 +92,8 @@ export default function Page() {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="w-full md:w-[42%] overflow-hidden" style={{ minHeight: '220px' }}>
+        {/* Book stack: desktop only — shown inside hero row */}
+        <div className="hidden md:block md:w-[42%] overflow-hidden h-full">
           <img
             src={IMAGES.heroBookStack}
             alt="Rozprávky pre workoholikov – kniha"
@@ -101,8 +102,35 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Price CTA 1 */}
-      <PriceCta buttonColor="yellow" />
+      {/* Mobile only: book stack + price side by side */}
+      <section className="flex md:hidden w-full" style={{ minHeight: '260px' }}>
+        <div className="w-1/2 overflow-hidden">
+          <img
+            src={IMAGES.heroBookStack}
+            alt="Rozprávky pre workoholikov – kniha"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="w-1/2 bg-[#f7f3ed] flex flex-col items-center justify-center px-4 py-8 gap-4">
+          <div className="flex flex-col items-center">
+            <span className="text-4xl font-bold leading-none text-black">€19,99</span>
+            <span className="text-sm font-light text-black mt-1">(na sklade)</span>
+          </div>
+          <a
+            href="https://martinus.sk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#e5a624] text-white rounded-full px-5 py-3 text-sm font-bold no-underline text-center"
+          >
+            Predobjednať na Martinus.sk
+          </a>
+        </div>
+      </section>
+
+      {/* Price CTA 1 — desktop only */}
+      <div className="hidden md:block">
+        <PriceCta buttonColor="yellow" />
+      </div>
 
       {/* Testimonials */}
       <section className="bg-[#f7f3ed] px-5 pb-10 md:pb-12">
