@@ -4,9 +4,6 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Rozprávky pre workoholikov',
   description: '42 príbehov o sebaklamoch, ktoré si nahovárame, aby sme v kancelárii nevyskočili z okna',
-  icons: {
-    icon: '/images/favico.svg',
-  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
