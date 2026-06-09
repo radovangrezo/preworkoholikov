@@ -9,6 +9,7 @@ const IMAGES = {
   shopCover2: '/images/shop-cover-2.png',
   socialIcons: '/images/social-icons.svg',
   characterIllustration: '/images/character-illustration.svg',
+  bookIllustration: '/images/book-illustration.svg',
 }
 
 const QUOTES = [
@@ -194,6 +195,15 @@ export default function Page() {
             className="w-full h-full object-cover"
           />
         </div>
+      </section>
+
+      {/* Book illustration divider */}
+      <section className="bg-[#f7f3ed] flex justify-center py-8">
+        <img
+          src={IMAGES.bookIllustration}
+          alt="Ilustrácia knihy"
+          className="h-56"
+        />
       </section>
 
       {/* Author Section */}
