@@ -20,22 +20,19 @@ const IMAGES = {
 
 const QUOTES = [
   {
-    text: "If you look at space companies, they've failed either because they've had a technical solution where success was not a possible outcome, they were unable to attract a critical mass of talent, or they just ran out of money. The finish line is usually a lot further away than you think.",
-    author: 'Elon Musk',
-    role: 'CEO of SpaceX',
-    link: 'https://spacex.com',
+    text: 'Táto kniha funguje ako ventil. aj sa odvzdušníte, aj sa zabavíte, aj na každom konci príbehu príde dopamínová odmena s twistom. lepšie než Netflix.',
+    author: 'Michal Pastier',
+    role: 'marketér a angel investor',
   },
   {
     text: "If you look at space companies, they've failed either because they've had a technical solution where success was not a possible outcome, they were unable to attract a critical mass of talent, or they just ran out of money. The finish line is usually a lot further away than you think.",
     author: 'Elon Musk',
     role: 'CEO of SpaceX',
-    link: 'https://spacex.com',
   },
   {
     text: "If you look at space companies, they've failed either because they've had a technical solution where success was not a possible outcome, they were unable to attract a critical mass of talent, or they just ran out of money. The finish line is usually a lot further away than you think.",
     author: 'Elon Musk',
     role: 'CEO of SpaceX',
-    link: 'https://spacex.com',
   },
 ]
 
@@ -69,16 +66,13 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
   )
 }
 
-function QuoteCard({ text, author, role, link }: (typeof QUOTES)[0]) {
+function QuoteCard({ text, author, role }: (typeof QUOTES)[0]) {
   return (
     <div className="bg-white rounded-[20px] p-6 md:p-8 flex flex-col gap-2">
       <span className="text-[#e5a624] text-6xl font-bold leading-none">&ldquo;</span>
       <p className="text-sm md:text-base italic font-light text-black leading-5 flex-1">{text}</p>
       <p className="text-sm font-medium italic text-black mt-2">
-        {author},{' '}
-        <a href={link} target="_blank" rel="noopener noreferrer" className="underline">
-          {role}
-        </a>
+        {author}, {role}
       </p>
     </div>
   )
