@@ -1,17 +1,21 @@
+import Image from 'next/image'
+
+const SOCIAL_ICON_SIZE = 49
+
 const IMAGES = {
-  heroIllustration: '/images/hero-illustration.png',
-  heroBookStack: '/images/hero-book-stack.png',
-  openBook1: '/images/open-book-1.png',
-  openBook2: '/images/open-book-2.png',
-  openBook3: '/images/open-book-3.png',
-  authorIllustration: '/images/author-illustration.png',
-  shopCover1: '/images/shop-cover-1.png',
-  shopCover2: '/images/shop-cover-2.png',
-  iconFacebook: '/images/icon-facebook.svg',
-  iconInstagram: '/images/icon-instagram.svg',
-  iconTiktok: '/images/icon-tiktok.svg',
-  characterIllustration: '/images/character-illustration.svg',
-  bookIllustration: '/images/book-illustration.svg',
+  heroIllustration: { src: '/images/hero-illustration.webp', width: 2000, height: 1125 },
+  heroBookStack: { src: '/images/hero-book-stack.webp', width: 1600, height: 1200 },
+  openBook1: { src: '/images/open-book-1.webp', width: 1600, height: 1200 },
+  openBook2: { src: '/images/open-book-2.webp', width: 1600, height: 1200 },
+  openBook3: { src: '/images/open-book-3.webp', width: 1600, height: 1200 },
+  authorIllustration: { src: '/images/author-illustration.webp', width: 1600, height: 1029 },
+  shopCover1: { src: '/images/shop-cover-1.webp', width: 900, height: 1353 },
+  shopCover2: { src: '/images/shop-cover-2.webp', width: 900, height: 604 },
+  iconFacebook: { src: '/images/icon-facebook.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
+  iconInstagram: { src: '/images/icon-instagram.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
+  iconTiktok: { src: '/images/icon-tiktok.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
+  characterIllustration: { src: '/images/character-illustration.svg', width: 174, height: 180 },
+  bookIllustration: { src: '/images/book-illustration.svg', width: 184, height: 180 },
 }
 
 const QUOTES = [
@@ -86,18 +90,22 @@ export default function Page() {
       {/* Hero — illustration */}
       <section className="flex flex-col md:flex-row w-full md:h-[522px]">
         <div className="w-full md:w-[58%] overflow-hidden">
-          <img
-            src={IMAGES.heroIllustration}
+          <Image
+            {...IMAGES.heroIllustration}
             alt="Rozprávky pre workoholikov – ilustrácia"
             className="w-full h-full object-cover"
+            sizes="(min-width: 768px) 58vw, 100vw"
+            priority
           />
         </div>
         {/* Book stack: desktop only — shown inside hero row */}
         <div className="hidden md:block md:w-[42%] overflow-hidden h-full">
-          <img
-            src={IMAGES.heroBookStack}
+          <Image
+            {...IMAGES.heroBookStack}
             alt="Rozprávky pre workoholikov – kniha"
             className="w-full h-full object-cover"
+            sizes="(min-width: 768px) 42vw, 50vw"
+            priority
           />
         </div>
       </section>
@@ -105,10 +113,11 @@ export default function Page() {
       {/* Mobile only: book stack + price side by side */}
       <section className="flex md:hidden w-full" style={{ minHeight: '260px' }}>
         <div className="w-1/2 overflow-hidden">
-          <img
-            src={IMAGES.heroBookStack}
+          <Image
+            {...IMAGES.heroBookStack}
             alt="Rozprávky pre workoholikov – kniha"
             className="w-full h-full object-cover"
+            sizes="50vw"
           />
         </div>
         <div className="w-1/2 bg-[#f7f3ed] flex flex-col items-center justify-center px-4 py-8 gap-4">
@@ -154,30 +163,28 @@ export default function Page() {
           </p>
         </div>
         <div className="w-full md:w-1/2 overflow-hidden" style={{ maxHeight: '435px', minHeight: '260px' }}>
-          <img
-            src={IMAGES.openBook1}
+          <Image
+            {...IMAGES.openBook1}
             alt="Otvorená kniha"
             className="w-full h-full object-cover"
+            sizes="(min-width: 768px) 50vw, 100vw"
           />
         </div>
       </section>
 
       {/* Character illustration divider */}
       <section className="bg-[#f7f3ed] flex justify-center py-8">
-        <img
-          src={IMAGES.characterIllustration}
-          alt="Ilustrácia postavy"
-          style={{ height: '180px', width: '174px' }}
-        />
+        <Image {...IMAGES.characterIllustration} alt="Ilustrácia postavy" />
       </section>
 
       {/* Bullet Section 1 */}
       <section className="flex flex-col md:flex-row w-full">
         <div className="w-full md:w-1/2 overflow-hidden order-2 md:order-1" style={{ maxHeight: '435px', minHeight: '260px' }}>
-          <img
-            src={IMAGES.openBook2}
+          <Image
+            {...IMAGES.openBook2}
             alt="Rozprávky pre workoholikov – ilustrovaná postava"
             className="w-full h-full object-cover"
+            sizes="(min-width: 768px) 50vw, 100vw"
           />
         </div>
         <div className="w-full md:w-1/2 bg-[#f7f3ed] flex items-center px-8 md:px-16 py-10 md:py-12 order-1 md:order-2">
@@ -219,30 +226,28 @@ export default function Page() {
           </div>
         </div>
         <div className="w-full md:w-1/2 overflow-hidden" style={{ maxHeight: '435px', minHeight: '260px' }}>
-          <img
-            src={IMAGES.openBook3}
+          <Image
+            {...IMAGES.openBook3}
             alt="Otvorená kniha"
             className="w-full h-full object-cover"
+            sizes="(min-width: 768px) 50vw, 100vw"
           />
         </div>
       </section>
 
       {/* Book illustration divider */}
       <section className="bg-[#f7f3ed] flex justify-center py-8">
-        <img
-          src={IMAGES.bookIllustration}
-          alt="Ilustrácia knihy"
-          style={{ height: '180px', width: '184px' }}
-        />
+        <Image {...IMAGES.bookIllustration} alt="Ilustrácia knihy" />
       </section>
 
       {/* Author Section */}
       <section id="author" className="flex flex-col md:flex-row w-full">
         <div className="w-full md:w-1/2 overflow-hidden" style={{ maxHeight: '435px', minHeight: '260px' }}>
-          <img
-            src={IMAGES.authorIllustration}
+          <Image
+            {...IMAGES.authorIllustration}
             alt="Radovan Andrej Grežo"
             className="w-full h-full object-cover"
+            sizes="(min-width: 768px) 50vw, 100vw"
           />
         </div>
         <div className="w-full md:w-1/2 bg-[#f7f3ed] flex items-center px-8 md:px-16 py-10 md:py-12">
@@ -270,10 +275,11 @@ export default function Page() {
               className="bg-white rounded-[20px] flex-1 flex flex-col items-center pb-8 overflow-hidden"
             >
               <div className="w-full overflow-hidden" style={{ maxHeight: '313px', minHeight: '200px' }}>
-                <img
-                  src={book.cover}
+                <Image
+                  {...book.cover}
                   alt={`Kniha ${i + 1}`}
                   className="w-full h-full object-cover"
+                  sizes="(min-width: 768px) 33vw, 100vw"
                 />
               </div>
               <p className="text-2xl md:text-[32px] font-bold text-black mt-6 mb-4">{book.price}</p>
@@ -293,13 +299,13 @@ export default function Page() {
       {/* Footer */}
       <footer className="bg-black w-full flex justify-center items-center gap-4 py-6">
         <a href="https://facebook.com/preworkoholikov" target="_blank" rel="noopener noreferrer">
-          <img src={IMAGES.iconFacebook} alt="Facebook" style={{ width: '49px', height: '49px' }} />
+          <Image {...IMAGES.iconFacebook} alt="Facebook" />
         </a>
         <a href="https://www.instagram.com/preworkoholikov" target="_blank" rel="noopener noreferrer">
-          <img src={IMAGES.iconInstagram} alt="Instagram" style={{ width: '49px', height: '49px' }} />
+          <Image {...IMAGES.iconInstagram} alt="Instagram" />
         </a>
         <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">
-          <img src={IMAGES.iconTiktok} alt="TikTok" style={{ width: '49px', height: '49px' }} />
+          <Image {...IMAGES.iconTiktok} alt="TikTok" />
         </a>
       </footer>
     </main>
