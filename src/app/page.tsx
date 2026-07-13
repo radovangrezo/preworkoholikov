@@ -68,11 +68,11 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
 
 function QuoteCard({ text, author, role }: (typeof QUOTES)[0]) {
   return (
-    <div className="bg-white rounded-[20px] p-6 md:p-8 flex flex-col gap-2">
+    <div className="bg-white rounded-[20px] p-6 md:p-8 flex flex-col gap-2 flex-1">
       <span className="text-[#e5a624] text-6xl font-bold leading-none">&ldquo;</span>
       <p className="text-sm md:text-base italic font-light text-black leading-5 flex-1">{text}</p>
       <p className="text-sm font-medium italic text-black mt-2">
-        {author}, {role}
+        {author}, <span className="font-normal">{role}</span>
       </p>
     </div>
   )
