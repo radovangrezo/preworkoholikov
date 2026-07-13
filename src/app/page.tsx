@@ -20,7 +20,7 @@ const IMAGES = {
 
 const QUOTES = [
   {
-    text: 'Táto kniha funguje ako ventil. aj sa odvzdušníte, aj sa zabavíte, aj na každom konci príbehu príde dopamínová odmena s twistom. Lepšie než Netflix.',
+    text: 'Táto kniha funguje ako ventil. Aj sa odvzdušníte, aj sa zabavíte, aj na každom konci príbehu príde dopamínová odmena s twistom. Lepšie než Netflix.',
     author: 'Michal Pastier',
     role: 'marketér a angel investor',
   },
