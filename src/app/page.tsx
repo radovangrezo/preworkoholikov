@@ -34,11 +34,6 @@ const QUOTES = [
     author: 'Elon Musk',
     role: 'CEO of SpaceX',
   },
-  {
-    text: "If you look at space companies, they've failed either because they've had a technical solution where success was not a possible outcome, they were unable to attract a critical mass of talent, or they just ran out of money. The finish line is usually a lot further away than you think.",
-    author: 'Elon Musk',
-    role: 'CEO of SpaceX',
-  },
 ]
 
 const SHOP_BOOKS = [
