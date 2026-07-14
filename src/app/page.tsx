@@ -25,6 +25,11 @@ const QUOTES = [
     role: 'marketér a angel investor',
   },
   {
+    text: 'Posledné, čo workoholici potrebujú, sú rozprávky. Presne tieto.',
+    author: 'Jakub Ptačin',
+    role: 'zakladateľ Studio Echt',
+  },
+  {
     text: "If you look at space companies, they've failed either because they've had a technical solution where success was not a possible outcome, they were unable to attract a critical mass of talent, or they just ran out of money. The finish line is usually a lot further away than you think.",
     author: 'Elon Musk',
     role: 'CEO of SpaceX',
