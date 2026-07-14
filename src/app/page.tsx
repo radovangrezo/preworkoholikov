@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { BOOK, MARTINUS_NAME, MARTINUS_PRODUCT_URL, OG_IMAGE, SITE_URL } from '@/lib/site'
 
 const SOCIAL_ICON_SIZE = 49
 
@@ -24,17 +25,64 @@ const QUOTES = [
     author: 'Michal Pastier',
     role: 'marketér a angel investor',
   },
+ { 
+      text: 'Posledné, čo workoholici potrebujú, sú rozprávky. Presne tieto.',
+      author: 'Jakub Ptačin',
+      role: 'zakladateľ Studio Echt',
+    },
+]
+
+const FAQ = [
   {
-    text: 'Posledné, čo workoholici potrebujú, sú rozprávky. Presne tieto.',
-    author: 'Jakub Ptačin',
-    role: 'zakladateľ Studio Echt',
+    question: `O čom je kniha ${BOOK.title}?`,
+    answer:
+      'Je to zbierka 42 krátkych satirických príbehov o práci a korporátnom živote – o kariére, poradách, manažéroch, mzdách aj firemných hodnotách. S humorom hovorí to, čo si o práci myslíme, ale nahlas nepovieme.',
   },
   {
-    text: "If you look at space companies, they've failed either because they've had a technical solution where success was not a possible outcome, they were unable to attract a critical mass of talent, or they just ran out of money. The finish line is usually a lot further away than you think.",
-    author: 'Elon Musk',
-    role: 'CEO of SpaceX',
+    question: 'Pre koho je kniha určená?',
+    answer:
+      'Pre každého, kto pracuje v korporáte, agentúre či kancelárii – a najmä pre workoholikov. Skvele funguje aj ako darček pre kolegov a priateľov, ktorí to s prácou preháňajú.',
+  },
+  {
+    question: 'Koľko kniha stojí a kde ju kúpim?',
+    answer: `Kniha stojí ${BOOK.priceDisplay} a predobjednáte si ju na Martinus.sk.`,
+  },
+  {
+    question: 'Kto je autorom knihy?',
+    answer: `Autorom je ${BOOK.author}, ktorý inšpiráciu zbieral počas 25 rokov práce v reklamných agentúrach na Slovensku aj v zahraničí. Predtým vydal Demotivačný diár pre rok 2021.`,
   },
 ]
+
+const STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Book',
+      name: BOOK.title,
+      author: { '@type': 'Person', name: BOOK.author },
+      description: BOOK.description,
+      inLanguage: BOOK.language,
+      image: `${SITE_URL}${OG_IMAGE.path}`,
+      url: SITE_URL,
+      offers: {
+        '@type': 'Offer',
+        price: BOOK.price,
+        priceCurrency: BOOK.priceCurrency,
+        availability: 'https://schema.org/PreOrder',
+        url: MARTINUS_PRODUCT_URL,
+        seller: { '@type': 'Organization', name: MARTINUS_NAME },
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: FAQ.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: { '@type': 'Answer', text: item.answer },
+      })),
+    },
+  ],
+}
 
 const SHOP_BOOKS = [
   { cover: IMAGES.shopCover1, price: '€XX,XX' },
@@ -51,11 +99,11 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
   return (
     <section className="bg-[#f7f3ed] py-10 md:py-12 flex flex-col items-center gap-4 px-6">
       <div className="flex items-baseline gap-3 flex-wrap justify-center">
-        <span className="text-5xl md:text-[60px] font-bold leading-none text-black">€19,99</span>
+        <span className="text-5xl md:text-[60px] font-bold leading-none text-black">{BOOK.priceDisplay}</span>
         <span className="text-xl md:text-2xl font-light text-black">(na sklade)</span>
       </div>
       <a
-        href="https://martinus.sk"
+        href={MARTINUS_PRODUCT_URL}
         target="_blank"
         rel="noopener noreferrer"
         className={`${btnClass} rounded-full px-8 md:px-10 py-4 text-lg md:text-xl font-bold no-underline text-center`}
@@ -68,7 +116,7 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
 
 function QuoteCard({ text, author, role }: (typeof QUOTES)[0]) {
   return (
-    <div className="bg-white rounded-[20px] p-6 md:p-8 flex flex-col gap-2 flex-1">
+    <div className="bg-white rounded-[20px] p-6 md:p-8 flex flex-col gap-2 flex-1 md:max-w-[442px]">
       <span className="text-[#e5a624] text-6xl font-bold leading-none">&ldquo;</span>
       <p className="text-sm md:text-base italic font-light text-black leading-5 flex-1">{text}</p>
       <p className="text-sm font-medium italic text-black mt-2">
@@ -81,6 +129,14 @@ function QuoteCard({ text, author, role }: (typeof QUOTES)[0]) {
 export default function Page() {
   return (
     <main className="bg-[#f7f3ed] min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA).replace(/</g, '\\u003c') }}
+      />
+      <h1 className="sr-only">
+        {BOOK.title} – kniha od {BOOK.authorGenitive}
+      </h1>
+
       {/* Hero — illustration */}
       <section className="flex flex-col md:flex-row w-full md:h-[522px]">
         <div className="w-full md:w-[58%] overflow-hidden">
@@ -116,11 +172,11 @@ export default function Page() {
         </div>
         <div className="w-1/2 bg-[#f7f3ed] flex flex-col items-center justify-center px-4 py-8 gap-4">
           <div className="flex flex-col items-center">
-            <span className="text-4xl font-bold leading-none text-black">€19,99</span>
+            <span className="text-4xl font-bold leading-none text-black">{BOOK.priceDisplay}</span>
             <span className="text-sm font-light text-black mt-1">(na sklade)</span>
           </div>
           <a
-            href="https://martinus.sk"
+            href={MARTINUS_PRODUCT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#e5a624] text-white rounded-full px-5 py-3 text-sm font-bold no-underline text-center"
@@ -137,7 +193,8 @@ export default function Page() {
 
       {/* Testimonials */}
       <section className="bg-[#f7f3ed] px-5 pb-10 md:pb-12">
-        <div className="flex flex-col md:flex-row gap-5 max-w-[1366px] mx-auto">
+        <h2 className="sr-only">Čo hovoria čitatelia</h2>
+        <div className="flex flex-col md:flex-row md:justify-center gap-5 max-w-[1366px] mx-auto">
           {QUOTES.map((q, i) => (
             <QuoteCard key={i} {...q} />
           ))}
@@ -146,6 +203,7 @@ export default function Page() {
 
       {/* Book Section 1 — About the book */}
       <section id="about" className="flex flex-col md:flex-row w-full">
+        <h2 className="sr-only">O knihe</h2>
         <div className="w-full md:w-1/2 bg-white flex items-center px-8 md:px-[134px] py-10 md:py-12">
           <p className="text-xl md:text-2xl text-black leading-relaxed">
             Baví vás vaša práca? Milujete svojich kolegov? Máte skvelého šéfa? Považujete firmu, v
@@ -183,10 +241,10 @@ export default function Page() {
         </div>
         <div className="w-full md:w-1/2 bg-[#f7f3ed] flex items-center px-8 md:px-16 py-10 md:py-12 order-1 md:order-2">
           <div className="text-xl md:text-2xl text-black">
-            <p className="font-bold mb-4">
+            <h2 className="font-bold mb-4">
               V 42 krátkych príbehoch nájdete všetko, čo si o práci myslíte, ale nemôžete povedať
               nahlas, pretože musíte splácať hypotéku:
-            </p>
+            </h2>
             <ul className="list-disc pl-8 space-y-1">
               <li>výsmech cieľavedomému budovaniu kariéry,</li>
               <li>zosmiešňovanie obetavosti,</li>
@@ -207,7 +265,7 @@ export default function Page() {
       <section className="flex flex-col md:flex-row w-full">
         <div className="w-full md:w-1/2 bg-white flex items-center px-8 md:px-[134px] py-10 md:py-12">
           <div className="text-xl md:text-2xl text-black">
-            <p className="font-bold mb-4">Prečítajte si trpko-smiešnu pravdu o:</p>
+            <h2 className="font-bold mb-4">Prečítajte si trpko-smiešnu pravdu o:</h2>
             <ul className="list-disc pl-8 space-y-1">
               <li>produktivite práce z domu,</li>
               <li>kamarátskych vzťahoch na pracovisku,</li>
@@ -246,7 +304,7 @@ export default function Page() {
         </div>
         <div className="w-full md:w-1/2 bg-[#f7f3ed] flex items-center px-8 md:px-16 py-10 md:py-12">
           <div className="text-xl md:text-2xl text-black">
-            <p className="font-bold mb-4">Radovan Andrej Grežo</p>
+            <h2 className="font-bold mb-4">{BOOK.author}</h2>
             <p className="leading-relaxed">
               vydal pred Rozprávkami pre workoholikov iba vtipný Demotivačný diár pre rok 2021.
               Inšpiráciu pre rozprávky zbieral počas 25 rokov v reklamných agentúrach na Slovensku
@@ -262,6 +320,7 @@ export default function Page() {
 
       {/* Where to Buy */}
       <section id="buy" className="bg-[#f7f3ed] py-10 md:py-12 px-5">
+        <h2 className="sr-only">Kde kúpiť knihu</h2>
         <div className="flex flex-col md:flex-row gap-5 max-w-[1366px] mx-auto">
           {SHOP_BOOKS.map((book, i) => (
             <div
@@ -278,7 +337,7 @@ export default function Page() {
               </div>
               <p className="text-2xl md:text-[32px] font-bold text-black mt-6 mb-4">{book.price}</p>
               <a
-                href="https://martinus.sk"
+                href={MARTINUS_PRODUCT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#e5a624] text-black rounded-full px-14 py-3 text-xl md:text-2xl font-bold no-underline"
@@ -287,6 +346,21 @@ export default function Page() {
               </a>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="bg-white py-10 md:py-12 px-8">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="text-2xl md:text-[32px] font-bold text-black mb-8">Časté otázky</h2>
+          <div className="flex flex-col gap-6">
+            {FAQ.map((item) => (
+              <div key={item.question}>
+                <h3 className="text-lg md:text-xl font-bold text-black mb-2">{item.question}</h3>
+                <p className="text-base md:text-lg text-black leading-relaxed">{item.answer}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
