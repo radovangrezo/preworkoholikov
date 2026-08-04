@@ -25,11 +25,16 @@ const QUOTES = [
     author: 'Michal Pastier',
     role: 'marketér a angel investor',
   },
- { 
-      text: 'Posledné, čo workoholici potrebujú, sú rozprávky. Presne tieto.',
-      author: 'Jakub Ptačin',
-      role: 'zakladateľ Studio Echt',
-    },
+  {
+    text: 'Posledné, čo workoholici potrebujú, sú rozprávky. Presne tieto.',
+    author: 'Jakub Ptačin',
+    role: 'zakladateľ Studio Echt',
+  },
+  {
+    text: 'Rozprávky pre workoholikov som si prečítal v prvý deň svojich prázdnin s rodinou. Ani neviem, čo celý deň robili oni. Mám teda empiricky overené, že Rozprávky pre workoholikov sú záchranou pre každého workoholika. Dokonca aj pre takého, ktorý sa náhle ocitne uprostred dovolenky.',
+    author: 'Jakub Nvota',
+    role: 'režisér a spisovateľ',
+  },
 ]
 
 const FAQ = [
