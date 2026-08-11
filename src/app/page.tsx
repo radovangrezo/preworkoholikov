@@ -105,7 +105,6 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
     <section className="bg-[#f7f3ed] py-10 md:py-12 flex flex-col items-center gap-4 px-6">
       <div className="flex items-baseline gap-3 flex-wrap justify-center">
         <span className="text-5xl md:text-[60px] font-bold leading-none text-black">{BOOK.priceDisplay}</span>
-        <span className="text-xl md:text-2xl font-light text-black">(na sklade)</span>
       </div>
       <a
         href={MARTINUS_PRODUCT_URL}
@@ -178,7 +177,6 @@ export default function Page() {
         <div className="w-1/2 bg-[#f7f3ed] flex flex-col items-center justify-center px-4 py-8 gap-4">
           <div className="flex flex-col items-center">
             <span className="text-4xl font-bold leading-none text-black">{BOOK.priceDisplay}</span>
-            <span className="text-sm font-light text-black mt-1">(na sklade)</span>
           </div>
           <a
             href={MARTINUS_PRODUCT_URL}
