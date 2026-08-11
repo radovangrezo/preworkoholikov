@@ -19,6 +19,6 @@ export const OG_IMAGE = {
   height: 630,
 }
 
-// Placeholder — replace with the book's product page URL once Martinus publishes it
-export const MARTINUS_PRODUCT_URL = 'https://martinus.sk'
+export const MARTINUS_PRODUCT_URL =
+  'https://www.martinus.sk/?uItem=3860317&z=TTS79C&utm_source=z%3DTTS79C&utm_medium=url&utm_campaign=partner'
 export const MARTINUS_NAME = 'Martinus'
