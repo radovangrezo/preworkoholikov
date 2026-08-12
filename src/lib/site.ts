@@ -7,8 +7,8 @@ export const BOOK = {
   authorGenitive: 'Radovana Andreja Greža',
   description:
     '42 príbehov o sebaklamoch, ktoré si nahovárame, aby sme v kancelárii nevyskočili z okna',
-  priceDisplay: '€13,99',
-  price: '13.99',
+  priceDisplay: '€14,99',
+  price: '14.99',
   priceCurrency: 'EUR',
   language: 'sk',
 }
