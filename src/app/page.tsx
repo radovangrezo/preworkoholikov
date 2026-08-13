@@ -1,23 +1,26 @@
 import Image from 'next/image'
-import { BOOK, MARTINUS_NAME, MARTINUS_PRODUCT_URL, OG_IMAGE, SITE_URL } from '@/lib/site'
+import Link from 'next/link'
+import { IMAGES } from '@/lib/images'
+import {
+  availabilitySchema,
+  BOOK,
+  buyCtaLabel,
+  isPreorder,
+  MARTINUS_NAME,
+  MARTINUS_PRODUCT_URL,
+  OG_IMAGE,
+  RELEASE_DATE,
+  releaseNotice,
+  ROUTES,
+  SITE_URL,
+} from '@/lib/site'
 
-const SOCIAL_ICON_SIZE = 49
-
-const IMAGES = {
-  heroIllustration: { src: '/images/hero-illustration.webp', width: 2000, height: 1125 },
-  heroBookStack: { src: '/images/hero-book-stack.webp', width: 1600, height: 1200 },
-  openBook1: { src: '/images/open-book-1.webp', width: 1600, height: 1200 },
-  openBook2: { src: '/images/open-book-2.webp', width: 1600, height: 1200 },
-  openBook3: { src: '/images/open-book-3.webp', width: 1600, height: 1200 },
-  authorIllustration: { src: '/images/author-illustration.webp', width: 1600, height: 1029 },
-  shopCover1: { src: '/images/shop-cover-1.webp', width: 900, height: 1353 },
-  shopCover2: { src: '/images/shop-cover-2.webp', width: 900, height: 604 },
-  iconFacebook: { src: '/images/icon-facebook.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
-  iconInstagram: { src: '/images/icon-instagram.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
-  iconTiktok: { src: '/images/icon-tiktok.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
-  characterIllustration: { src: '/images/character-illustration.svg', width: 174, height: 180 },
-  bookIllustration: { src: '/images/book-illustration.svg', width: 184, height: 180 },
-}
+/**
+ * The page is prerendered, so it is regenerated hourly. Without this the buy button and
+ * the schema.org availability would stay frozen at whatever they were when the site was
+ * last deployed, and would not change on publication day.
+ */
+export const revalidate = 3600
 
 const QUOTES = [
   {
@@ -58,35 +61,47 @@ const FAQ = [
   },
 ]
 
-const STRUCTURED_DATA = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Book',
-      name: BOOK.title,
-      author: { '@type': 'Person', name: BOOK.author },
-      description: BOOK.description,
-      inLanguage: BOOK.language,
-      image: `${SITE_URL}${OG_IMAGE.path}`,
-      url: SITE_URL,
-      offers: {
-        '@type': 'Offer',
-        price: BOOK.price,
-        priceCurrency: BOOK.priceCurrency,
-        availability: 'https://schema.org/PreOrder',
-        url: MARTINUS_PRODUCT_URL,
-        seller: { '@type': 'Organization', name: MARTINUS_NAME },
+/** Built per render so availability follows the publication date rather than build time. */
+function buildStructuredData() {
+  const offer = {
+    '@type': 'Offer',
+    price: BOOK.price,
+    priceCurrency: BOOK.priceCurrency,
+    availability: availabilitySchema(),
+    // Only meaningful while the book is still forthcoming.
+    ...(isPreorder() ? { availabilityStarts: RELEASE_DATE } : {}),
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Book',
+        name: BOOK.title,
+        author: { '@type': 'Person', name: BOOK.author },
+        description: BOOK.description,
+        inLanguage: BOOK.language,
+        image: `${SITE_URL}${OG_IMAGE.path}`,
+        url: SITE_URL,
+        offers: [
+          { ...offer, url: `${SITE_URL}${ROUTES.checkout}` },
+          {
+            ...offer,
+            url: MARTINUS_PRODUCT_URL,
+            seller: { '@type': 'Organization', name: MARTINUS_NAME },
+          },
+        ],
       },
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: FAQ.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: { '@type': 'Answer', text: item.answer },
-      })),
-    },
-  ],
+      {
+        '@type': 'FAQPage',
+        mainEntity: FAQ.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: { '@type': 'Answer', text: item.answer },
+        })),
+      },
+    ],
+  }
 }
 
 const SHOP_BOOKS = [
@@ -106,13 +121,22 @@ function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' 
       <div className="flex items-baseline gap-3 flex-wrap justify-center">
         <span className="text-5xl md:text-[60px] font-bold leading-none text-black">{BOOK.priceDisplay}</span>
       </div>
+      <div className="flex flex-col items-center gap-2">
+        <Link
+          href={ROUTES.checkout}
+          className={`${btnClass} rounded-full px-8 md:px-10 py-4 text-lg md:text-xl font-bold no-underline text-center`}
+        >
+          {buyCtaLabel()}
+        </Link>
+        {releaseNotice() ? <p className="text-sm text-black">{releaseNotice()}</p> : null}
+      </div>
       <a
         href={MARTINUS_PRODUCT_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className={`${btnClass} rounded-full px-8 md:px-10 py-4 text-lg md:text-xl font-bold no-underline text-center`}
+        className="text-sm text-black underline"
       >
-        Predobjednať na Martinus.sk
+        alebo na {MARTINUS_NAME}.sk
       </a>
     </section>
   )
@@ -135,7 +159,9 @@ export default function Page() {
     <main className="bg-[#f7f3ed] min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA).replace(/</g, '\\u003c') }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildStructuredData()).replace(/</g, '\\u003c'),
+        }}
       />
       <h1 className="sr-only">
         {BOOK.title} – kniha od {BOOK.authorGenitive}
@@ -178,14 +204,17 @@ export default function Page() {
           <div className="flex flex-col items-center">
             <span className="text-4xl font-bold leading-none text-black">{BOOK.priceDisplay}</span>
           </div>
-          <a
-            href={MARTINUS_PRODUCT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#e5a624] text-white rounded-full px-5 py-3 text-sm font-bold no-underline text-center"
-          >
-            Predobjednať na Martinus.sk
-          </a>
+          <div className="flex flex-col items-center gap-2">
+            <Link
+              href={ROUTES.checkout}
+              className="bg-[#e5a624] text-white rounded-full px-5 py-3 text-sm font-bold no-underline text-center"
+            >
+              {buyCtaLabel()}
+            </Link>
+            {releaseNotice() ? (
+              <p className="text-xs text-black text-center leading-tight">{releaseNotice()}</p>
+            ) : null}
+          </div>
         </div>
       </section>
 
@@ -368,16 +397,30 @@ export default function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black w-full flex justify-center items-center gap-4 py-6">
-        <a href="https://facebook.com/preworkoholikov" target="_blank" rel="noopener noreferrer">
-          <Image {...IMAGES.iconFacebook} alt="Facebook" />
-        </a>
-        <a href="https://www.instagram.com/preworkoholikov" target="_blank" rel="noopener noreferrer">
-          <Image {...IMAGES.iconInstagram} alt="Instagram" />
-        </a>
-        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">
-          <Image {...IMAGES.iconTiktok} alt="TikTok" />
-        </a>
+      <footer className="bg-black w-full flex flex-col items-center gap-4 py-6">
+        <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 px-6 text-sm text-white">
+          <Link href={ROUTES.terms} className="underline">
+            Obchodné podmienky
+          </Link>
+          <Link href={ROUTES.privacy} className="underline">
+            Ochrana osobných údajov
+          </Link>
+          <Link href={ROUTES.withdrawal} className="underline">
+            Odstúpenie od zmluvy
+          </Link>
+        </nav>
+        <div className="flex justify-center items-center gap-4">
+          <a href="https://facebook.com/preworkoholikov" target="_blank" rel="noopener noreferrer">
+            <Image {...IMAGES.iconFacebook} alt="Facebook" />
+          </a>
+          <a
+            href="https://www.instagram.com/preworkoholikov"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image {...IMAGES.iconInstagram} alt="Instagram" />
+          </a>
+        </div>
       </footer>
     </main>
   )
