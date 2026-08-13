@@ -115,11 +115,13 @@ shared test sender in production.
 openssl rand -hex 32
 ```
 
-`vercel.json` already schedules `/api/cron/sync-shipments` hourly. Vercel sends
+`vercel.json` schedules `/api/cron/sync-shipments` for **17:00 UTC daily** (19:00 Slovak time
+in summer, 18:00 in winter), which catches parcels handed over during that day. Vercel sends
 `Authorization: Bearer $CRON_SECRET` automatically once the variable is set in the project.
 
-> On Vercel's Hobby plan cron jobs run only once per day. If you are on Hobby, either accept
-> a daily shipped email or upgrade to Pro for the hourly schedule in `vercel.json`.
+> The Hobby plan allows only **one cron run per day**, and a more frequent expression makes the
+> whole deployment fail validation — not just the cron. On Pro you can raise it to hourly
+> (`0 * * * *`) so shipped emails go out sooner.
 
 ### How "shipped" is detected
 
