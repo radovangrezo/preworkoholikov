@@ -420,9 +420,6 @@ export default function Page() {
           >
             <Image {...IMAGES.iconInstagram} alt="Instagram" />
           </a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">
-            <Image {...IMAGES.iconTiktok} alt="TikTok" />
-          </a>
         </div>
       </footer>
     </main>

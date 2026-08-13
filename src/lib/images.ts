@@ -12,7 +12,6 @@ export const IMAGES = {
   shopCover2: { src: '/images/shop-cover-2.webp', width: 900, height: 604 },
   iconFacebook: { src: '/images/icon-facebook.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
   iconInstagram: { src: '/images/icon-instagram.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
-  iconTiktok: { src: '/images/icon-tiktok.svg', width: SOCIAL_ICON_SIZE, height: SOCIAL_ICON_SIZE },
   characterIllustration: { src: '/images/character-illustration.svg', width: 174, height: 180 },
   bookIllustration: { src: '/images/book-illustration.svg', width: 184, height: 180 },
 }
