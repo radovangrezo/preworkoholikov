@@ -1,13 +1,21 @@
 import type { MetadataRoute } from 'next'
-import { SITE_URL } from '@/lib/site'
+import { ROUTES, SITE_URL } from '@/lib/site'
+
+/** Checkout and thank-you pages are deliberately left out: they are noindex. */
+const PAGES: { path: string; priority: number; changeFrequency: 'monthly' | 'yearly' }[] = [
+  { path: '', priority: 1, changeFrequency: 'monthly' },
+  { path: ROUTES.terms, priority: 0.3, changeFrequency: 'yearly' },
+  { path: ROUTES.privacy, priority: 0.3, changeFrequency: 'yearly' },
+  { path: ROUTES.withdrawal, priority: 0.3, changeFrequency: 'yearly' },
+]
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: SITE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 1,
-    },
-  ]
+  const lastModified = new Date()
+
+  return PAGES.map((page) => ({
+    url: `${SITE_URL}${page.path}`,
+    lastModified,
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
+  }))
 }
