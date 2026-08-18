@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { MerchCard } from '@/components/merch/MerchCard'
 import { listProductsWithPrices } from '@/lib/printful/client'
+import type { PrintfulProductListing } from '@/lib/printful/types'
 import { BOOK } from '@/lib/site'
 
 const TITLE = 'Merch'
@@ -14,7 +15,16 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 export default async function MerchPage() {
-  const products = await listProductsWithPrices()
+  // A Printful outage, an expired token or a missing key must not fail the build or take
+  // the site down: the page falls back to its empty state and recovers on the next
+  // revalidation. This page is prerendered, so an unguarded throw here breaks deployment.
+  let products: PrintfulProductListing[] = []
+
+  try {
+    products = await listProductsWithPrices()
+  } catch (error) {
+    console.error('[merch] could not load products', error)
+  }
 
   return (
     <main className="px-5 pb-12 md:px-8">

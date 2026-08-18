@@ -13,7 +13,15 @@ async function loadProduct(params: PageProps['params']) {
   const { id } = await params
   const productId = Number(id)
   if (!Number.isInteger(productId) || productId <= 0) return null
-  return getProduct(productId)
+
+  // Treat a Printful failure as "not found" rather than a 500, so an outage shows a normal
+  // page instead of an error screen.
+  try {
+    return await getProduct(productId)
+  } catch (error) {
+    console.error(`[merch] could not load product ${productId}`, error)
+    return null
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
