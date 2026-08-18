@@ -8,6 +8,7 @@ export const ENV = {
   packetaEshopName: 'PACKETA_ESHOP_NAME',
   packetaCarrierIdHomeSk: 'PACKETA_CARRIER_ID_HOME_SK',
   packetaCarrierIdHomeCz: 'PACKETA_CARRIER_ID_HOME_CZ',
+  printfulAccessKey: 'PRINTFUL_ACCESS_KEY',
   resendApiKey: 'RESEND_API_KEY',
   orderEmailFrom: 'ORDER_EMAIL_FROM',
   orderEmailBcc: 'ORDER_EMAIL_BCC',

@@ -44,7 +44,8 @@ export default function WithdrawalPage() {
 {`Komu: ${SELLER.name}, ${SELLER.address}, ${SELLER.email}
 
 Týmto oznamujem, že odstupujem od zmluvy na tento tovar:
-${BOOK.title}
+.................................................
+(napr. ${BOOK.title}, alebo konkrétny kus merchu)
 
 Číslo objednávky: ..............................
 Dátum objednania: ..............................

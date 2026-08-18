@@ -1,0 +1,49 @@
+/**
+ * Merch is fulfilled and shipped by Printful, so it shares nothing with the book's
+ * Packeta flow beyond Stripe. Kept free of server-only imports so the cart can use it.
+ *
+ * Merch ships to the same two countries as the book, so the country list and labels are
+ * reused from the commerce config rather than duplicated here.
+ */
+import type { Country } from '@/lib/config/commerce'
+
+export const MERCH_CURRENCY = 'EUR'
+export const MERCH_STRIPE_CURRENCY = 'eur'
+
+/**
+ * VAT already contained in merch prices, by delivery country. Merch does not qualify for
+ * the reduced rate books get, so these are the standard rates. Printful's retail_price is
+ * the gross amount the customer pays, so this describes what that price already includes;
+ * it is never added on top.
+ */
+export const MERCH_VAT_RATE_PERCENT: Record<Country, number> = { SK: 23, CZ: 21 }
+
+export const MAX_MERCH_ITEM_QUANTITY = 10
+/** Guards against a cart built by hand in the console. */
+export const MAX_MERCH_CART_LINES = 20
+
+/** How long product data is cached before Printful is asked again, in seconds. */
+export const MERCH_CACHE_SECONDS = 3600
+
+/**
+ * Display order on the shop pages, by Printful product id — Printful's own ordering is not
+ * meaningful. Anything not listed here (a product added later) still appears, after these,
+ * so a new product is never hidden by forgetting to add it.
+ */
+export const MERCH_PRODUCT_ORDER: number[] = [
+  456511047, // Hrnček biely
+  456511237, // Hrnček čierny
+  456510998, // Unisex tričko
+  456511345, // Poznámkový blok
+  456511361, // Detské bodíčko
+  456511426, // Plátená taška čierna
+]
+
+export const MERCH_ORDER_STATUS = {
+  PENDING: 'pending',
+  PAID: 'paid',
+  SHIPPED: 'shipped',
+  CANCELLED: 'cancelled',
+} as const
+export type MerchOrderStatus = (typeof MERCH_ORDER_STATUS)[keyof typeof MERCH_ORDER_STATUS]
+

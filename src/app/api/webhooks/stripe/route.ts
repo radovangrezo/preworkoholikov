@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 import { ENV, requireEnv } from '@/lib/env'
+import { fulfillPaidMerchOrder } from '@/lib/merch/fulfillment'
+import { markMerchCancelledOnce, markMerchPaidOnce } from '@/lib/merch/repository'
 import { fulfillPaidOrder } from '@/lib/orders/fulfillment'
 import {
   getOrderItems,
@@ -9,6 +11,8 @@ import {
   releaseStock,
 } from '@/lib/orders/repository'
 import { stripeClient } from '@/lib/stripe/client'
+import { BOOK_ORDER_TYPE } from '@/lib/stripe/checkout'
+import { MERCH_ORDER_TYPE } from '@/lib/stripe/merch-checkout'
 
 export const runtime = 'nodejs'
 
@@ -48,14 +52,27 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ received: true })
   }
 
+  // Sessions created before merch existed carry no order_type, and were all book orders.
+  const orderType = session.metadata?.order_type ?? BOOK_ORDER_TYPE
+  const isMerch = orderType === MERCH_ORDER_TYPE
+
   if (event.type === EXPIRED_EVENT) {
-    return releaseAbandonedCheckout(orderId)
+    return isMerch ? cancelAbandonedMerch(orderId) : releaseAbandonedBook(orderId)
   }
 
   if (session.payment_status !== 'paid') {
     return NextResponse.json({ received: true })
   }
 
+  return isMerch
+    ? handlePaidMerch(orderId, session)
+    : handlePaidBook(orderId, session)
+}
+
+async function handlePaidBook(
+  orderId: string,
+  session: Stripe.Checkout.Session,
+): Promise<NextResponse> {
   let order
   try {
     order = await markPaidOnce(orderId, resolvePaymentIntentId(session))
@@ -80,11 +97,38 @@ export async function POST(request: Request): Promise<NextResponse> {
   return NextResponse.json({ received: true })
 }
 
+async function handlePaidMerch(
+  orderId: string,
+  session: Stripe.Checkout.Session,
+): Promise<NextResponse> {
+  let order
+  try {
+    order = await markMerchPaidOnce(orderId, resolvePaymentIntentId(session))
+  } catch (error) {
+    console.error('[stripe-webhook] could not mark merch order paid', error)
+    return NextResponse.json({ error: 'Order update failed' }, { status: 500 })
+  }
+
+  if (!order) {
+    return NextResponse.json({ received: true, duplicate: true })
+  }
+
+  const outcome = await fulfillPaidMerchOrder(order)
+  if (outcome.errors.length > 0) {
+    console.error(
+      `[stripe-webhook] merch order ${order.order_number} needs attention`,
+      outcome.errors,
+    )
+  }
+
+  return NextResponse.json({ received: true })
+}
+
 /**
  * The customer never finished paying, so the copies held for them go back on the shelf.
  * The single-transition guard means a repeated event cannot release the same copies twice.
  */
-async function releaseAbandonedCheckout(orderId: string): Promise<NextResponse> {
+async function releaseAbandonedBook(orderId: string): Promise<NextResponse> {
   try {
     const cancelled = await markCancelledOnce(orderId)
     if (!cancelled) {
@@ -102,6 +146,17 @@ async function releaseAbandonedCheckout(orderId: string): Promise<NextResponse> 
     // 5xx so Stripe retries; otherwise the copies stay reserved forever.
     console.error('[stripe-webhook] could not release an expired checkout', error)
     return NextResponse.json({ error: 'Stock release failed' }, { status: 500 })
+  }
+}
+
+/** Merch is printed on demand, so there is no stock to return — just close the order. */
+async function cancelAbandonedMerch(orderId: string): Promise<NextResponse> {
+  try {
+    const cancelled = await markMerchCancelledOnce(orderId)
+    return NextResponse.json({ received: true, duplicate: !cancelled })
+  } catch (error) {
+    console.error('[stripe-webhook] could not cancel an expired merch checkout', error)
+    return NextResponse.json({ error: 'Cancel failed' }, { status: 500 })
   }
 }
 

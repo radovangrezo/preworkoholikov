@@ -8,7 +8,8 @@ const TITLE = 'Ochrana osobných údajov'
 /** Third parties that see order data. Keep in sync with the services we actually use. */
 const PROCESSORS = [
   { name: 'Stripe Payments Europe, Ltd.', purpose: 'spracovanie platby kartou' },
-  { name: 'Packeta Slovakia s. r. o.', purpose: 'doručenie zásielky' },
+  { name: 'Packeta Slovakia s. r. o.', purpose: 'doručenie knihy' },
+  { name: 'Printful', purpose: 'výroba a doručenie merchu' },
   { name: 'Resend, Inc.', purpose: 'odosielanie e-mailov o objednávke' },
   { name: 'Supabase, Inc.', purpose: 'databáza objednávok' },
   { name: 'Vercel, Inc.', purpose: 'hosting webovej stránky' },
