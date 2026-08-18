@@ -169,6 +169,49 @@ select sku, total_printed, claimed, total_printed - claimed as available from in
 update inventory set total_printed = total_printed + 1000 where sku = 'RPW-001';
 ```
 
+## 5b. Merch (Printful)
+
+Merch is a second shop that shares only Stripe with the book. Printful prints and ships each
+item, so there is no Packeta packet and no stock to track — print on demand cannot sell out.
+
+- `PRINTFUL_ACCESS_KEY` — a private token from Printful → Settings → API. **Private tokens
+  expire**; generate a new one before the old lapses or merch checkout stops working.
+- Products come straight from your Printful store, cached for an hour. Adding a product or
+  changing a price there appears on the site within the hour — no deploy needed.
+- Prices shown to customers are Printful's `retail_price`. Set them in Printful, not in code.
+- Merch ships to Slovakia and Czechia only, the same as the book.
+- Shipping is quoted live per address. The customer picks from the options Printful
+  returns (standard, express where offered); the chosen option is re-checked server-side
+  against that quote, so a forged rate id falls back to the cheapest.
+- VAT included in merch prices: Slovakia 23%, Czechia 21% — merch does not get the
+  reduced rate books do. Set gross prices in Printful; VAT is never added at checkout.
+
+Money flows customer → you (Stripe) → Printful bills your wallet for production and shipping.
+Printful never touches your customers' money.
+
+### Watch the margin
+
+Nothing checks that a retail price exceeds what Printful charges you. A t-shirt selling for
+€18,50 that costs you €10,25 plus €4,29 shipping leaves roughly €3,96 before Stripe's fee. If
+you lower prices in Printful, check you are still above cost.
+
+### Order lifecycle
+
+```
+customer fills the cart → POST /api/merch/checkout
+    re-prices every line from Printful and quotes live shipping
+  → Stripe Checkout
+  → POST /api/webhooks/stripe
+       marks the merch order paid (once)
+       creates the Printful order, submitted for fulfilment
+       sends the confirmation email
+  → the daily cron asks Printful for each order's status and sends the
+    "on the way" email once it reports fulfilled
+```
+
+A Printful or email failure never rolls back a paid order: it is recorded in
+`merch_orders.printful_error` and logged, exactly as with the book.
+
 ## 6. Test run (before Packeta and Resend are configured)
 
 You can verify most of the shop with only Supabase and Stripe set up. Packeta and email will
@@ -246,6 +289,7 @@ Project → Settings → Environment Variables. Scope them to **Production**.
 | `PACKETA_ESHOP_NAME` | `Somebody` | yes |
 | `PACKETA_CARRIER_ID_HOME_SK` | `131` | yes |
 | `PACKETA_CARRIER_ID_HOME_CZ` | `106` | yes |
+| `PRINTFUL_ACCESS_KEY` | Printful private token (expires — renew before it lapses) | yes |
 | `RESEND_API_KEY` | `re_…` | yes |
 | `ORDER_EMAIL_FROM` | `Rozprávky Pre Workoholikov <objednavky@preworkoholikov.sk>` | yes |
 | `ORDER_EMAIL_BCC` | *optional* — your address, to copy every order | yes |

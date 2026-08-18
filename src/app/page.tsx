@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { MerchTeaser } from '@/components/merch/MerchTeaser'
 import { IMAGES } from '@/lib/images'
 import {
   availabilitySchema,
@@ -103,12 +104,6 @@ function buildStructuredData() {
     ],
   }
 }
-
-const SHOP_BOOKS = [
-  { cover: IMAGES.shopCover1, price: '€XX,XX' },
-  { cover: IMAGES.shopCover2, price: '€XX,XX' },
-  { cover: IMAGES.shopCover1, price: '€XX,XX' },
-]
 
 function PriceCta({ buttonColor = 'yellow' }: { buttonColor?: 'yellow' | 'pink' }) {
   const btnClass =
@@ -350,36 +345,8 @@ export default function Page() {
       {/* Price CTA 3 */}
       <PriceCta buttonColor="yellow" />
 
-      {/* Where to Buy */}
-      <section id="buy" className="bg-[#f7f3ed] py-10 md:py-12 px-5">
-        <h2 className="sr-only">Kde kúpiť knihu</h2>
-        <div className="flex flex-col md:flex-row gap-5 max-w-[1366px] mx-auto">
-          {SHOP_BOOKS.map((book, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-[20px] flex-1 flex flex-col items-center pb-8 overflow-hidden"
-            >
-              <div className="w-full overflow-hidden" style={{ maxHeight: '313px', minHeight: '200px' }}>
-                <Image
-                  {...book.cover}
-                  alt={`Kniha ${i + 1}`}
-                  className="w-full h-full object-cover"
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                />
-              </div>
-              <p className="text-2xl md:text-[32px] font-bold text-black mt-6 mb-4">{book.price}</p>
-              <a
-                href={MARTINUS_PRODUCT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#e5a624] text-black rounded-full px-14 py-3 text-xl md:text-2xl font-bold no-underline"
-              >
-                Kúpiť
-              </a>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Merch */}
+      <MerchTeaser />
 
       {/* FAQ */}
       <section id="faq" className="bg-white py-10 md:py-12 px-8">

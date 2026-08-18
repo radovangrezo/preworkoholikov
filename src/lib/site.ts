@@ -67,6 +67,13 @@ export const ROUTES = {
   terms: '/obchodne-podmienky',
   privacy: '/ochrana-osobnych-udajov',
   withdrawal: '/odstupenie-od-zmluvy',
+  merch: '/merch',
+  merchCart: '/merch/kosik',
+  merchThankYou: '/merch/dakujeme',
+}
+
+export function merchProductPath(productId: number): string {
+  return `${ROUTES.merch}/${productId}`
 }
 
 export const OG_IMAGE = {

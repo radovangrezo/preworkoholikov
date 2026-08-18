@@ -9,6 +9,7 @@ import {
   SHIPPING_CENTS,
   VAT_RATE_PERCENT,
 } from '@/lib/config/commerce'
+import { MERCH_VAT_RATE_PERCENT } from '@/lib/config/merch'
 import {
   DISPATCH_TIME,
   SELLER,
@@ -59,11 +60,27 @@ export default function TermsPage() {
 
       <LegalSection title="3. Cena a platba">
         <p>
-          Cena knihy je {BOOK.priceDisplay} za kus vrátane DPH. Sadzba DPH sa riadi krajinou
-          doručenia:{' '}
+          Cena knihy je {BOOK.priceDisplay} za kus vrátane DPH. Sadzba DPH pri knihe sa riadi
+          krajinou doručenia:{' '}
           {COUNTRIES.map((country) => `${COUNTRY_LABELS[country]} ${VAT_RATE_PERCENT[country]} %`)
             .join(', ')}
-          . K cene sa pripočítava cena dopravy podľa zvoleného spôsobu doručenia. Celková cena je
+          .
+        </p>
+        <p>
+          Ceny merchu (tričká, hrnčeky a ďalšie predmety) sú uvedené pri každom produkte v
+          sekcii{' '}
+          <a href={ROUTES.merch} className="underline">
+            Merch
+          </a>{' '}
+          a sú uvedené vrátane DPH. Na merch sa nevzťahuje znížená sadzba DPH platná pre knihy;
+          sadzba sa riadi krajinou doručenia:{' '}
+          {COUNTRIES.map(
+            (country) => `${COUNTRY_LABELS[country]} ${MERCH_VAT_RATE_PERCENT[country]} %`,
+          ).join(', ')}
+          .
+        </p>
+        <p>
+          K cene sa pripočítava cena dopravy podľa zvoleného spôsobu doručenia. Celková cena je
           vždy zobrazená pred odoslaním objednávky.
         </p>
         <p>
@@ -88,7 +105,15 @@ export default function TermsPage() {
             )),
           )}
         </ul>
-        <p>Zásielku odosielame {DISPATCH_TIME}.</p>
+        <p>Knihu odosielame {DISPATCH_TIME}.</p>
+        <p>
+          Merch vyrábame na objednávku prostredníctvom partnera Printful, ktorý zásielku odosiela
+          priamo kupujúcemu. Merch doručujeme do {COUNTRY_LABELS_GENITIVE.SK} a{' '}
+          {COUNTRY_LABELS_GENITIVE.CZ}. Cena dopravy merchu sa
+          vypočítava podľa doručovacej adresy a zvoleného spôsobu dopravy. Dostupné spôsoby
+          dopravy vrátane orientačnej dodacej lehoty a ceny zobrazíme v košíku po zadaní adresy.
+          Keďže každý kus vyrábame na objednávku, dodanie merchu trvá dlhšie ako dodanie knihy.
+        </p>
       </LegalSection>
 
       <LegalSection title={`5. Odstúpenie od zmluvy do ${WITHDRAWAL_DAYS} dní`}>

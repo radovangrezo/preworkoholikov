@@ -79,6 +79,13 @@ export async function createCheckoutSession(params: {
   return { id: session.id, url: session.url }
 }
 
+/** order_type lets the one shared webhook tell book orders from merch orders. */
+export const BOOK_ORDER_TYPE = 'book'
+
 function orderMetadata(order: OrderRow): Record<string, string> {
-  return { order_id: order.id, order_number: order.order_number }
+  return {
+    order_type: BOOK_ORDER_TYPE,
+    order_id: order.id,
+    order_number: order.order_number,
+  }
 }
