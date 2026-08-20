@@ -1,5 +1,10 @@
 import { ENV, requireEnv } from '@/lib/env'
-import { MERCH_CACHE_SECONDS, MERCH_CURRENCY, MERCH_PRODUCT_ORDER } from '@/lib/config/merch'
+import {
+  MERCH_CACHE_SECONDS,
+  MERCH_CURRENCY,
+  MERCH_PRODUCT_ORDER,
+  MERCH_SIZES,
+} from '@/lib/config/merch'
 import type {
   PrintfulProduct,
   PrintfulProductListing,
@@ -100,6 +105,7 @@ function displayRank(productId: number): number {
 
 type RawVariant = {
   id: number
+  sync_product_id: number
   variant_id: number
   name: string
   size: string | null
@@ -129,8 +135,21 @@ export async function getProduct(
     id: result.sync_product.id,
     name: result.sync_product.name,
     thumbnailUrl: result.sync_product.thumbnail_url,
-    variants: (result.sync_variants ?? []).map(toVariant),
+    variants: (result.sync_variants ?? [])
+      .filter((raw) => isOfferedSize(productId, raw.size ?? null))
+      .map(toVariant),
   }
+}
+
+/**
+ * Whether the shop sells a size. Applied here rather than in the page, so a size the shop
+ * has withdrawn is invisible to every caller — including the one that prices a basket,
+ * which is what stops a cart built by hand from ordering it anyway.
+ */
+function isOfferedSize(productId: number, size: string | null): boolean {
+  const offered = MERCH_SIZES[productId]
+  if (!offered || size === null) return true
+  return offered.includes(size)
 }
 
 function toVariant(raw: RawVariant): PrintfulVariant {
@@ -158,6 +177,7 @@ export async function getVariant(syncVariantId: number): Promise<PrintfulVariant
   // /store/products/{id} wraps things in sync_product / sync_variants.
   const result = await call<RawVariant>(`/store/variants/${syncVariantId}`)
   if (!result?.id) return null
+  if (!isOfferedSize(result.sync_product_id, result.size ?? null)) return null
   return toVariant(result)
 }
 

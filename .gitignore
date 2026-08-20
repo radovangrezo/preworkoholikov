@@ -27,3 +27,7 @@ next-env.d.ts
 # Claude
 SKILL.md
 claude.md
+
+# Design sources and superseded assets, kept locally rather than in the repo
+OG image Affinity files/
+public/images/og-image-old.jpg

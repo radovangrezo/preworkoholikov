@@ -1,10 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
+import { ProductGallery } from '@/components/merch/ProductGallery'
 import { useCart } from '@/components/merch/useCart'
 import { MAX_MERCH_ITEM_QUANTITY } from '@/lib/config/merch'
+import { productImages } from '@/lib/merch/gallery'
 import { formatEur } from '@/lib/money'
 import type { PrintfulProduct, PrintfulVariant } from '@/lib/printful/types'
 import { ROUTES } from '@/lib/site'
@@ -26,55 +27,92 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
     () => unique(available.filter((v) => v.color === color).map((v) => v.size)),
     [available, color],
   )
-  const [size, setSize] = useState<string | null>(sizesForColor[0] ?? null)
 
-  const selected = useMemo(
-    () => pickVariant(available, color, size) ?? available[0] ?? null,
-    [available, color, size],
+  /**
+   * The size of each piece being bought, so somebody buying three t-shirts can take one
+   * of each size. Its length is the quantity, and a product sold in one size holds a
+   * single null entry — which keeps one code path for everything in the shop.
+   */
+  const [sizes, setSizes] = useState<(string | null)[]>([sizesForColor[0] ?? null])
+
+  const chosen = useMemo(
+    () =>
+      sizes
+        .map((size) => pickVariant(available, color, size) ?? available[0] ?? null)
+        .filter((variant): variant is PrintfulVariant => variant !== null),
+    [available, color, sizes],
   )
 
-  const [quantity, setQuantity] = useState(1)
+  const selected = chosen[0] ?? null
   const [added, setAdded] = useState(false)
   const { add } = useCart()
 
   function changeColor(nextColor: string) {
     setColor(nextColor)
-    // The chosen size may not exist in the new colour, so fall back to its first size.
+    // A colour need not come in the same sizes, so anything it lacks falls back.
     const nextSizes = unique(available.filter((v) => v.color === nextColor).map((v) => v.size))
-    if (!nextSizes.includes(size)) setSize(nextSizes[0] ?? null)
+    setSizes((current) =>
+      current.map((size) => (nextSizes.includes(size) ? size : (nextSizes[0] ?? null))),
+    )
+    setAdded(false)
+  }
+
+  function changeQuantity(quantity: number) {
+    setSizes((current) =>
+      quantity <= current.length
+        ? current.slice(0, quantity)
+        : // A piece added to the order repeats the size chosen last, which is the
+          // common case and saves changing every dropdown.
+          [
+            ...current,
+            ...Array<string | null>(quantity - current.length).fill(current.at(-1) ?? null),
+          ],
+    )
+    setAdded(false)
+  }
+
+  function changeSize(index: number, size: string) {
+    setSizes((current) => current.map((current, at) => (at === index ? size : current)))
     setAdded(false)
   }
 
   function handleAdd() {
-    if (!selected) return
-    add({
-      syncVariantId: selected.syncVariantId,
-      quantity,
-      productId: product.id,
-      name: selected.name,
-      size: selected.size,
-      color: selected.color,
-      priceCents: selected.priceCents,
-      imageUrl: selected.imageUrl,
-    })
-    setAdded(true)
+    // The cart is keyed by variant, so pieces that share a size become one line.
+    const lines = new Map<number, { variant: PrintfulVariant; quantity: number }>()
+
+    for (const variant of chosen) {
+      const line = lines.get(variant.syncVariantId)
+      if (line) line.quantity += 1
+      else lines.set(variant.syncVariantId, { variant, quantity: 1 })
+    }
+
+    for (const { variant, quantity } of lines.values()) {
+      add({
+        syncVariantId: variant.syncVariantId,
+        quantity,
+        productId: product.id,
+        name: variant.name,
+        size: variant.size,
+        color: variant.color,
+        priceCents: variant.priceCents,
+        imageUrl: variant.imageUrl,
+      })
+    }
+
+    setAdded(lines.size > 0)
   }
 
-  const image = selected?.imageUrl ?? product.thumbnailUrl
+  const images = useMemo(() => productImages(product, selected), [product, selected])
+
+  // Sizes of one product can differ in price, and mixing them makes no single unit price
+  // true, so the cheapest is quoted the way the product cards do it.
+  const prices = chosen.map((variant) => variant.priceCents)
+  const oneUnitPrice = prices.every((price) => price === prices[0])
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
-      <div className="overflow-hidden rounded-[20px] bg-white">
-        <Image
-          src={image}
-          alt={product.name}
-          width={900}
-          height={900}
-          className="h-full w-full object-cover"
-          sizes="(min-width: 768px) 50vw, 100vw"
-          priority
-        />
-      </div>
+      {/* Keyed on the colour so the gallery reopens on that colour's own mockup. */}
+      <ProductGallery key={color ?? ''} images={images} />
 
       <div className="flex flex-col gap-5">
         <div>
@@ -82,7 +120,10 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
             {product.name}
           </h1>
           {selected ? (
-            <p className="mt-2 text-2xl font-bold text-black">{formatEur(selected.priceCents)}</p>
+            <p className="mt-2 text-2xl font-bold text-black">
+              {oneUnitPrice ? '' : 'od '}
+              {formatEur(Math.min(...prices))}
+            </p>
           ) : null}
         </div>
 
@@ -112,29 +153,7 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
               </div>
             ) : null}
 
-            {sizesForColor.length > 1 ? (
-              <div>
-                <label className={LABEL_CLASS} htmlFor="size">
-                  Veľkosť
-                </label>
-                <select
-                  id="size"
-                  className={SELECT_CLASS}
-                  value={size ?? ''}
-                  onChange={(event) => {
-                    setSize(event.target.value)
-                    setAdded(false)
-                  }}
-                >
-                  {sizesForColor.map((option) => (
-                    <option key={option ?? ''} value={option ?? ''}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : null}
-
+            {/* Above the sizes, because the count decides how many of them there are. */}
             <div>
               <label className={LABEL_CLASS} htmlFor="quantity">
                 Počet kusov
@@ -142,8 +161,8 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
               <select
                 id="quantity"
                 className={SELECT_CLASS}
-                value={quantity}
-                onChange={(event) => setQuantity(Number(event.target.value))}
+                value={sizes.length}
+                onChange={(event) => changeQuantity(Number(event.target.value))}
               >
                 {Array.from({ length: MAX_MERCH_ITEM_QUANTITY }, (_, i) => i + 1).map((value) => (
                   <option key={value} value={value}>
@@ -152,6 +171,28 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
                 ))}
               </select>
             </div>
+
+            {sizesForColor.length > 1
+              ? sizes.map((size, index) => (
+                  <div key={index}>
+                    <label className={LABEL_CLASS} htmlFor={`size-${index}`}>
+                      {sizes.length > 1 ? `Veľkosť – ${index + 1}. kus` : 'Veľkosť'}
+                    </label>
+                    <select
+                      id={`size-${index}`}
+                      className={SELECT_CLASS}
+                      value={size ?? ''}
+                      onChange={(event) => changeSize(index, event.target.value)}
+                    >
+                      {sizesForColor.map((option) => (
+                        <option key={option ?? ''} value={option ?? ''}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))
+              : null}
 
             <button
               type="button"
