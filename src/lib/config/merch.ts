@@ -39,6 +39,18 @@ export const MERCH_PRODUCT_ORDER: number[] = [
   456511426, // Plátená taška čierna
 ]
 
+/**
+ * Sizes the shop sells, by Printful product id. A product not listed here is sold in
+ * every size Printful has synced, and sizeless products are unaffected.
+ *
+ * Kept here rather than unsynced in Printful so the variants stay set up: offering a
+ * size again is a one-line edit. The trade-off is that Printful is no longer the only
+ * place that decides what is for sale, so unsync there instead if a size is gone for good.
+ */
+export const MERCH_SIZES: Record<number, string[]> = {
+  456510998: ['S', 'M', 'L', 'XL'], // Unisex tričko
+}
+
 export const MERCH_ORDER_STATUS = {
   PENDING: 'pending',
   PAID: 'paid',
