@@ -1,10 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
+import { ProductGallery } from '@/components/merch/ProductGallery'
 import { useCart } from '@/components/merch/useCart'
 import { MAX_MERCH_ITEM_QUANTITY } from '@/lib/config/merch'
+import { productImages } from '@/lib/merch/gallery'
 import { formatEur } from '@/lib/money'
 import type { PrintfulProduct, PrintfulVariant } from '@/lib/printful/types'
 import { ROUTES } from '@/lib/site'
@@ -60,21 +61,12 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
     setAdded(true)
   }
 
-  const image = selected?.imageUrl ?? product.thumbnailUrl
+  const images = useMemo(() => productImages(product, selected), [product, selected])
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
-      <div className="overflow-hidden rounded-[20px] bg-white">
-        <Image
-          src={image}
-          alt={product.name}
-          width={900}
-          height={900}
-          className="h-full w-full object-cover"
-          sizes="(min-width: 768px) 50vw, 100vw"
-          priority
-        />
-      </div>
+      {/* Keyed on the colour so the gallery reopens on that colour's own mockup. */}
+      <ProductGallery key={color ?? ''} images={images} />
 
       <div className="flex flex-col gap-5">
         <div>

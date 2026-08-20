@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "packeta:carriers": "node --env-file=.env.local scripts/packeta-carriers.mjs"
+    "packeta:carriers": "node --env-file=.env.local scripts/packeta-carriers.mjs",
+    "merch:mockups": "node --env-file=.env.local scripts/merch-mockups.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
