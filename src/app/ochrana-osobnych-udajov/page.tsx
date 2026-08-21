@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { CookieSettings } from '@/components/CookieSettings'
 import { LegalPage, LegalSection } from '@/components/LegalPage'
 import { DATA_PROTECTION_AUTHORITY, SELLER } from '@/lib/config/seller'
 import { BOOK } from '@/lib/site'
@@ -13,6 +14,7 @@ const PROCESSORS = [
   { name: 'Resend, Inc.', purpose: 'odosielanie e-mailov o objednávke' },
   { name: 'Supabase, Inc.', purpose: 'databáza objednávok' },
   { name: 'Vercel, Inc.', purpose: 'hosting webovej stránky' },
+  { name: 'Meta Platforms Ireland Limited', purpose: 'meranie účinnosti reklamy — len s vaším súhlasom' },
 ]
 
 export const metadata: Metadata = {
@@ -53,6 +55,10 @@ export default function PrivacyPage() {
           <li>
             Vybavenie reklamácií a odstúpení od zmluvy — plnenie zmluvy a zákonných povinností.
           </li>
+          <li>
+            Meranie účinnosti reklamy pomocou súborov cookie — váš súhlas podľa čl. 6 ods. 1 písm.
+            a) GDPR. Bez neho nič nemeriame.
+          </li>
         </ul>
       </LegalSection>
 
@@ -72,6 +78,26 @@ export default function PrivacyPage() {
           Údaje o objednávke uchovávame po dobu potrebnú na vybavenie objednávky a následne po dobu
           vyžadovanú právnymi predpismi, najmä v oblasti účtovníctva.
         </p>
+      </LegalSection>
+
+      <LegalSection title="Súbory cookie">
+        <p>
+          Na fungovanie stránky a na váš nákup nepotrebujeme žiadne sledovacie súbory cookie.
+          Košík si ukladáme priamo vo vašom prehliadači a tieto údaje sa nikam neodosielajú.
+        </p>
+        <p>
+          Nad rámec toho by sme radi merali, ako sa nám darí s reklamou. Slúži na to Meta Pixel
+          spoločnosti Meta Platforms Ireland Limited, ktorý zaznamenáva návštevy stránky a nákupy
+          a spája ich s vaším účtom na Facebooku či Instagrame. Načítame ho výhradne vtedy, ak nám
+          na to dáte súhlas — kým sa nerozhodnete alebo ak nás odmietnete, do vášho prehliadača
+          sa nedostane a Meta sa o vašej návšteve nedozvie.
+        </p>
+        <p>
+          Súhlas je dobrovoľný a môžete ho kedykoľvek odvolať. Odvolanie nemá vplyv na zákonnosť
+          spracúvania pred jeho odvolaním. Údaje sa spracúvajú aj v USA, na základe štandardných
+          zmluvných doložiek Európskej komisie.
+        </p>
+        <CookieSettings />
       </LegalSection>
 
       <LegalSection title="Vaše práva">
