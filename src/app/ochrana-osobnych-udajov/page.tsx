@@ -14,6 +14,7 @@ const PROCESSORS = [
   { name: 'Resend, Inc.', purpose: 'odosielanie e-mailov o objednávke' },
   { name: 'Supabase, Inc.', purpose: 'databáza objednávok' },
   { name: 'Vercel, Inc.', purpose: 'hosting webovej stránky' },
+  { name: 'Google Ireland Limited', purpose: 'meranie návštevnosti — len s vaším súhlasom' },
   { name: 'Meta Platforms Ireland Limited', purpose: 'meranie účinnosti reklamy — len s vaším súhlasom' },
 ]
 
@@ -56,8 +57,8 @@ export default function PrivacyPage() {
             Vybavenie reklamácií a odstúpení od zmluvy — plnenie zmluvy a zákonných povinností.
           </li>
           <li>
-            Meranie účinnosti reklamy pomocou súborov cookie — váš súhlas podľa čl. 6 ods. 1 písm.
-            a) GDPR. Bez neho nič nemeriame.
+            Meranie návštevnosti a účinnosti reklamy pomocou súborov cookie — váš súhlas podľa
+            čl. 6 ods. 1 písm. a) GDPR. Bez neho nič nemeriame.
           </li>
         </ul>
       </LegalSection>
@@ -86,11 +87,23 @@ export default function PrivacyPage() {
           Košík si ukladáme priamo vo vašom prehliadači a tieto údaje sa nikam neodosielajú.
         </p>
         <p>
-          Nad rámec toho by sme radi merali, ako sa nám darí s reklamou. Slúži na to Meta Pixel
-          spoločnosti Meta Platforms Ireland Limited, ktorý zaznamenáva návštevy stránky a nákupy
-          a spája ich s vaším účtom na Facebooku či Instagrame. Načítame ho výhradne vtedy, ak nám
-          na to dáte súhlas — kým sa nerozhodnete alebo ak nás odmietnete, do vášho prehliadača
-          sa nedostane a Meta sa o vašej návšteve nedozvie.
+          Nad rámec toho by sme radi vedeli, koľko ľudí na stránku chodí a ako sa nám darí
+          s reklamou. Slúžia na to dva nástroje:
+        </p>
+        <ul className="list-disc pl-6">
+          <li>
+            Google Analytics spoločnosti Google Ireland Limited — meria návštevnosť stránky, teda
+            ktoré stránky si ľudia otvárajú a odkiaľ prišli.
+          </li>
+          <li>
+            Meta Pixel spoločnosti Meta Platforms Ireland Limited — zaznamenáva návštevy stránky
+            a nákupy a spája ich s vaším účtom na Facebooku či Instagrame.
+          </li>
+        </ul>
+        <p>
+          Načítame ich výhradne vtedy, ak nám na to dáte súhlas — kým sa nerozhodnete alebo ak nás
+          odmietnete, do vášho prehliadača sa nedostanú a Google ani Meta sa o vašej návšteve
+          nedozvedia.
         </p>
         <p>
           Súhlas je dobrovoľný a môžete ho kedykoľvek odvolať. Odvolanie nemá vplyv na zákonnosť
