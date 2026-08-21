@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+import { CookieBanner } from '@/components/CookieBanner'
+import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { MetaPixel } from '@/components/MetaPixel'
 import { BOOK, OG_IMAGE, SITE_URL } from '@/lib/site'
 import './globals.css'
 
@@ -38,7 +41,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={BOOK.language}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <GoogleAnalytics />
+        <MetaPixel />
+        <CookieBanner />
+      </body>
     </html>
   )
 }
