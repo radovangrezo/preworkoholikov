@@ -58,7 +58,8 @@ export default function PrivacyPage() {
           </li>
           <li>
             Meranie návštevnosti a účinnosti reklamy pomocou súborov cookie — váš súhlas podľa
-            čl. 6 ods. 1 písm. a) GDPR. Bez neho nič nemeriame.
+            čl. 6 ods. 1 písm. a) GDPR. Bez neho neukladáme do vášho zariadenia nič a nevytvárame
+            o vás žiadny identifikátor.
           </li>
         </ul>
       </LegalSection>
@@ -101,9 +102,17 @@ export default function PrivacyPage() {
           </li>
         </ul>
         <p>
-          Načítame ich výhradne vtedy, ak nám na to dáte súhlas — kým sa nerozhodnete alebo ak nás
-          odmietnete, do vášho prehliadača sa nedostanú a Google ani Meta sa o vašej návšteve
-          nedozvedia.
+          Meta Pixel načítame výhradne vtedy, ak nám na to dáte súhlas. Kým sa nerozhodnete alebo
+          ak nás odmietnete, do vášho prehliadača sa vôbec nedostane a Meta sa o vašej návšteve
+          nedozvie.
+        </p>
+        <p>
+          Google Analytics sa načíta vždy, ale bez vášho súhlasu beží v režime Google Consent Mode:
+          neukladá do vášho zariadenia žiadne súbory cookie, nevytvára o vás identifikátor a Googlu
+          odošle len základný údaj o načítaní stránky, ktorý nemožno spojiť s vami ani s vašou
+          predchádzajúcou návštevou. Súčasťou takého spojenia je aj vaša IP adresa — Google
+          Analytics ju neukladá a používa ju len na určenie približnej lokality. Až po udelení
+          súhlasu meria bežným spôsobom.
         </p>
         <p>
           Súhlas je dobrovoľný a môžete ho kedykoľvek odvolať. Odvolanie nemá vplyv na zákonnosť
