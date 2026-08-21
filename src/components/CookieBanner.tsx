@@ -20,8 +20,9 @@ export function CookieBanner() {
         <div className="flex flex-col gap-2 text-black">
           <h2 className="text-lg font-bold">Súbory cookie</h2>
           <p className="text-sm leading-relaxed">
-            Na meranie účinnosti našej reklamy by sme radi použili Meta Pixel. Spustíme ho, len ak
-            nám to dovolíte — bez súhlasu stránka funguje úplne rovnako. Viac v{' '}
+            Na meranie návštevnosti a účinnosti našej reklamy by sme radi použili Google Analytics
+            a Meta Pixel. Spustíme ich, len ak nám to dovolíte — bez súhlasu stránka funguje úplne
+            rovnako. Viac v{' '}
             <Link href={ROUTES.privacy} className="underline">
               ochrane osobných údajov
             </Link>

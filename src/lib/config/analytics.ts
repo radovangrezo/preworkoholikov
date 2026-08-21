@@ -10,3 +10,12 @@ export const META_PIXEL_SCRIPT_SRC = 'https://connect.facebook.net/en_US/fbevent
  * Meta's <noscript> fallback image is deliberately absent: consent is stored in the
  * browser and read with JavaScript, so a visitor without it can never have granted any.
  */
+
+/**
+ * Google Analytics 4. The measurement ID is public too, for the same reason.
+ */
+export const GA_MEASUREMENT_ID = 'G-9WV5DLMGYQ'
+
+export function gaScriptSrc(measurementId: string): string {
+  return `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
+}
