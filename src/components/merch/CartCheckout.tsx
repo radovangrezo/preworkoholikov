@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useCart } from '@/components/merch/useCart'
 import { COUNTRIES, COUNTRY_LABELS } from '@/lib/config/commerce'
 import { MAX_MERCH_ITEM_QUANTITY } from '@/lib/config/merch'
+import { inMillilitres } from '@/lib/merch/sizes'
 import { formatEur } from '@/lib/money'
 import { ROUTES } from '@/lib/site'
 
@@ -157,14 +158,14 @@ export function CartCheckout() {
               {line.imageUrl ? (
                 <Image
                   src={line.imageUrl}
-                  alt={line.name}
+                  alt={inMillilitres(line.name)}
                   width={72}
                   height={72}
                   className="h-18 w-18 rounded-xl object-cover"
                 />
               ) : null}
               <div className="flex-1">
-                <p className="font-medium text-black">{line.name}</p>
+                <p className="font-medium text-black">{inMillilitres(line.name)}</p>
                 <p className="text-sm text-black/60">{formatEur(line.priceCents)} / ks</p>
               </div>
               <select

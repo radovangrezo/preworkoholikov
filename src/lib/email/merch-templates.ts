@@ -1,6 +1,7 @@
 import { COUNTRY_LABELS, isCountry } from '@/lib/config/commerce'
 import type { OutgoingEmail } from '@/lib/email/client'
 import { EMAIL_COLORS, escapeHtml, layout } from '@/lib/email/layout'
+import { inMillilitres } from '@/lib/merch/sizes'
 import type { MerchOrderItemRow, MerchOrderRow } from '@/lib/merch/types'
 import { formatEur } from '@/lib/money'
 
@@ -118,8 +119,12 @@ export function buildMerchShippedEmail(order: MerchOrderRow): OutgoingEmail {
 
 function describeItem(item: MerchOrderItemRow): string {
   const options = [item.color, item.size].filter(Boolean).join(', ')
-  // Printful variant names already include the options, so avoid repeating them.
-  return options && !item.name.includes(options) ? `${item.name} (${options})` : item.name
+  // Printful variant names already include the options, so avoid repeating them. The
+  // comparison is on Printful's own wording; millilitres come after, once it is done.
+  const described =
+    options && !item.name.includes(options) ? `${item.name} (${options})` : item.name
+
+  return inMillilitres(described)
 }
 
 function addressText(order: MerchOrderRow): string {

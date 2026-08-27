@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ClearCartOnMount } from '@/components/merch/ClearCartOnMount'
 import { MERCH_ORDER_STATUS } from '@/lib/config/merch'
 import { getMerchOrderByPublicToken } from '@/lib/merch/repository'
+import { inMillilitres } from '@/lib/merch/sizes'
 import type { MerchOrderWithItems } from '@/lib/merch/types'
 import { formatEur } from '@/lib/money'
 import { BOOK, ROUTES } from '@/lib/site'
@@ -61,7 +62,7 @@ function OrderSummary({ result }: { result: MerchOrderWithItems }) {
         {items.map((item) => (
           <div key={item.id} className="flex justify-between py-1 text-black">
             <span>
-              {item.name} × {item.quantity}
+              {inMillilitres(item.name)} × {item.quantity}
             </span>
             <span>{formatEur(item.unit_price_cents * item.quantity)}</span>
           </div>
