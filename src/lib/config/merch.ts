@@ -31,10 +31,13 @@ export const MERCH_CACHE_SECONDS = 3600
  * so a new product is never hidden by forgetting to add it.
  */
 export const MERCH_PRODUCT_ORDER: number[] = [
-  456511047, // Hrnček biely
-  456511237, // Hrnček čierny
+  459911365, // Hrnček takmer NAJLEPŠÍ ŠÉF (biely)
+  459911463, // Hrnček takmer NAJLEPŠÍ ŠÉF (čierny)
+  459911597, // Poznámkový blok Meetingový meškač
+  459911572, // Taška Mohla som kopať kanály
+  459911578, // Taška Mohol som kopať kanály
   456510998, // Unisex tričko
-  456511345, // Poznámkový blok
+  456511345, // Poznámkový blok Viac projektov
   456511361, // Detské bodíčko
   456511426, // Plátená taška čierna
 ]
