@@ -2,7 +2,8 @@
  * Downloads extra mockup views for every merch product from Printful's mockup generator,
  * saves them under public/images/merch/ and writes the manifest the shop reads.
  *
- * Usage:  npm run merch:mockups
+ * Usage:  npm run merch:mockups              (every product in the store)
+ *         npm run merch:mockups -- 12345    (only the products whose ids are given)
  * (reads PRINTFUL_ACCESS_KEY from .env.local)
  *
  * The generator hands back temporary URLs that stop working after a few days, so the
@@ -11,7 +12,7 @@
  */
 
 import { createHash } from 'node:crypto'
-import { mkdir, readdir, rm, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const ACCESS_KEY = process.env.PRINTFUL_ACCESS_KEY
@@ -103,6 +104,14 @@ const RATE_LIMIT_FALLBACK_SECONDS = 60
 
 /** Manifest key for variants that carry no colour. Mirrored in src/lib/merch/gallery.ts. */
 const NO_COLOR_KEY = ''
+
+/** Products named on the command line; everything in the store when there are none. */
+const ONLY = process.argv.slice(2).map(Number)
+
+if (ONLY.some((id) => !Number.isInteger(id) || id <= 0)) {
+  console.error(`Product ids must be whole numbers: ${process.argv.slice(2).join(' ')}`)
+  process.exit(1)
+}
 
 if (!ACCESS_KEY) {
   console.error('PRINTFUL_ACCESS_KEY is empty in .env.local.')
@@ -302,6 +311,22 @@ async function collectProduct(productId) {
 }
 
 /**
+ * The manifest as it stands. A run for a single product merges into this, so every other
+ * product keeps the pictures it already has. Read out of the generated file rather than
+ * imported, because Node cannot import TypeScript.
+ */
+async function existingManifest() {
+  const source = await readFile(MANIFEST_PATH, 'utf8').catch(() => '')
+  const object = source.slice(source.indexOf('{'), source.lastIndexOf('}') + 1)
+
+  try {
+    return JSON.parse(object)
+  } catch {
+    return {}
+  }
+}
+
+/**
  * Pictures of a product the shop no longer sells. The manifest is written from scratch,
  * so anything it stopped mentioning is dead weight in the repository.
  */
@@ -331,10 +356,18 @@ export const MERCH_EXTRA_MOCKUPS: Record<string, Record<string, string[]>> = ${J
 
 // Products removed from the store keep coming back from Printful, only flagged as
 // ignored. The shop does not sell them, so they get no pictures either.
-const summaries = (await api('/store/products')).filter((summary) => !summary.is_ignored)
+const inStore = (await api('/store/products')).filter((summary) => !summary.is_ignored)
+const summaries = ONLY.length === 0 ? inStore : inStore.filter((s) => ONLY.includes(s.id))
+
+const missing = ONLY.filter((id) => !summaries.some((summary) => summary.id === id))
+if (missing.length > 0) {
+  console.error(`Not in the store: ${missing.join(', ')}`)
+  process.exit(1)
+}
+
 console.log(`Generating mockups for ${summaries.length} products.\n`)
 
-const manifest = {}
+const manifest = ONLY.length === 0 ? {} : await existingManifest()
 const failed = []
 
 for (const summary of summaries) {
