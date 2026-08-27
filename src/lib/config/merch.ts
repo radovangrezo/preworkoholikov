@@ -31,13 +31,35 @@ export const MERCH_CACHE_SECONDS = 3600
  * so a new product is never hidden by forgetting to add it.
  */
 export const MERCH_PRODUCT_ORDER: number[] = [
-  456511047, // Hrnček biely
-  456511237, // Hrnček čierny
+  459911365, // Hrnček takmer NAJLEPŠÍ ŠÉF (biely)
+  459911463, // Hrnček takmer NAJLEPŠÍ ŠÉF (čierny)
+  459911597, // Poznámkový blok Meetingový meškač
+  459911572, // Taška Mohla som kopať kanály
+  459911578, // Taška Mohol som kopať kanály
   456510998, // Unisex tričko
-  456511345, // Poznámkový blok
+  456511345, // Poznámkový blok Viac projektov
   456511361, // Detské bodíčko
   456511426, // Plátená taška čierna
 ]
+
+/**
+ * Card pictures the shop uses instead of Printful's own, by Printful product id.
+ *
+ * Printful decides for itself which mockup it hands out as a product's thumbnail, and it
+ * does not always follow the one chosen in its dashboard — a lifestyle photo of a model
+ * holding the thing, where the shop wants the thing itself. This is how the shop insists.
+ *
+ * The file belongs in public/images/merch-overrides/, outside the directory
+ * `npm run merch:mockups` rebuilds, so a mockup run cannot delete it; name it with a hash
+ * of its contents so a replacement arrives on a fresh URL. Product pages are unaffected —
+ * they show Printful's own picture of whichever variant is chosen.
+ */
+export const MERCH_PRODUCT_THUMBNAILS: Record<number, string> = {
+  // Printful keeps handing out the model shot; the shop shows the bag itself.
+  459911578: '/images/merch-overrides/459911578-40fba7a1.jpg', // Taška Mohol som kopať kanály
+  // Printful's thumbnail for this one still carries the design it had before it was redone.
+  459911572: '/images/merch-overrides/459911572-72e2ec2d.png', // Taška Mohla som kopať kanály
+}
 
 /**
  * Sizes the shop sells, by Printful product id. A product not listed here is sold in

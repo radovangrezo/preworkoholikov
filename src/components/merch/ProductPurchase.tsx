@@ -6,6 +6,7 @@ import { ProductGallery } from '@/components/merch/ProductGallery'
 import { useCart } from '@/components/merch/useCart'
 import { MAX_MERCH_ITEM_QUANTITY } from '@/lib/config/merch'
 import { productImages } from '@/lib/merch/gallery'
+import { inMillilitres, isVolume } from '@/lib/merch/sizes'
 import { formatEur } from '@/lib/money'
 import type { PrintfulProduct, PrintfulVariant } from '@/lib/printful/types'
 import { ROUTES } from '@/lib/site'
@@ -34,6 +35,17 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
    * single null entry — which keeps one code path for everything in the shop.
    */
   const [sizes, setSizes] = useState<(string | null)[]>([sizesForColor[0] ?? null])
+
+  /**
+   * The one capacity a mug is made in. There is nothing to choose, but a shopper still
+   * wants to know how big the mug is — whereas the single size of a tote or a notebook
+   * ("One size") tells them nothing, so only capacities are stated.
+   */
+  const soleVolume = useMemo(() => {
+    const [only] = sizesForColor
+    if (sizesForColor.length !== 1 || !only || !isVolume(only)) return null
+    return inMillilitres(only)
+  }, [sizesForColor])
 
   const chosen = useMemo(
     () =>
@@ -186,13 +198,20 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
                     >
                       {sizesForColor.map((option) => (
                         <option key={option ?? ''} value={option ?? ''}>
-                          {option}
+                          {inMillilitres(option ?? '')}
                         </option>
                       ))}
                     </select>
                   </div>
                 ))
               : null}
+
+            {soleVolume ? (
+              <div>
+                <span className={LABEL_CLASS}>Veľkosť</span>
+                <p className="text-base text-black">{soleVolume}</p>
+              </div>
+            ) : null}
 
             <button
               type="button"

@@ -3,6 +3,7 @@ import {
   MERCH_CACHE_SECONDS,
   MERCH_CURRENCY,
   MERCH_PRODUCT_ORDER,
+  MERCH_PRODUCT_THUMBNAILS,
   MERCH_SIZES,
 } from '@/lib/config/merch'
 import type {
@@ -59,18 +60,24 @@ async function call<T>(
   return payload?.result as T
 }
 
+/**
+ * Everything the shop sells. A product removed from the Printful store keeps its id and
+ * goes on being returned by the API, only flagged `is_ignored` — so removed products are
+ * filtered out here rather than quietly staying on sale.
+ */
 export async function listProducts(): Promise<PrintfulProductSummary[]> {
-  const result = await call<{ id: number; name: string; thumbnail_url: string; variants: number }[]>(
-    '/store/products',
-    { revalidate: MERCH_CACHE_SECONDS },
-  )
+  const result = await call<
+    { id: number; name: string; thumbnail_url: string; variants: number; is_ignored: boolean }[]
+  >('/store/products', { revalidate: MERCH_CACHE_SECONDS })
 
-  return (result ?? []).map((product) => ({
-    id: product.id,
-    name: product.name,
-    thumbnailUrl: product.thumbnail_url,
-    variantCount: product.variants,
-  }))
+  return (result ?? [])
+    .filter((product) => !product.is_ignored)
+    .map((product) => ({
+      id: product.id,
+      name: product.name,
+      thumbnailUrl: thumbnailOf(product.id, product.thumbnail_url),
+      variantCount: product.variants,
+    }))
 }
 
 /**
@@ -106,6 +113,7 @@ function displayRank(productId: number): number {
 type RawVariant = {
   id: number
   sync_product_id: number
+  is_ignored: boolean
   variant_id: number
   name: string
   size: string | null
@@ -123,22 +131,28 @@ export async function getProduct(
   options: { fresh?: boolean } = {},
 ): Promise<PrintfulProduct | null> {
   const result = await call<{
-    sync_product: { id: number; name: string; thumbnail_url: string }
+    sync_product: { id: number; name: string; thumbnail_url: string; is_ignored: boolean }
     sync_variants: RawVariant[]
   }>(`/store/products/${productId}`, {
     revalidate: options.fresh ? false : MERCH_CACHE_SECONDS,
   })
 
-  if (!result?.sync_product) return null
+  // A removed product still answers on its own URL, so its page has to 404 by hand.
+  if (!result?.sync_product || result.sync_product.is_ignored) return null
 
   return {
     id: result.sync_product.id,
     name: result.sync_product.name,
-    thumbnailUrl: result.sync_product.thumbnail_url,
+    thumbnailUrl: thumbnailOf(result.sync_product.id, result.sync_product.thumbnail_url),
     variants: (result.sync_variants ?? [])
-      .filter((raw) => isOfferedSize(productId, raw.size ?? null))
+      .filter((raw) => !raw.is_ignored && isOfferedSize(productId, raw.size ?? null))
       .map(toVariant),
   }
+}
+
+/** The picture that stands for a product, which the shop may override. */
+function thumbnailOf(productId: number, printfulUrl: string): string {
+  return MERCH_PRODUCT_THUMBNAILS[productId] ?? printfulUrl
 }
 
 /**
@@ -176,7 +190,7 @@ export async function getVariant(syncVariantId: number): Promise<PrintfulVariant
   // Note the shape: this endpoint returns the variant directly in `result`, whereas
   // /store/products/{id} wraps things in sync_product / sync_variants.
   const result = await call<RawVariant>(`/store/variants/${syncVariantId}`)
-  if (!result?.id) return null
+  if (!result?.id || result.is_ignored) return null
   if (!isOfferedSize(result.sync_product_id, result.size ?? null)) return null
   return toVariant(result)
 }
