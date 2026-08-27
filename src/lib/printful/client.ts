@@ -3,6 +3,7 @@ import {
   MERCH_CACHE_SECONDS,
   MERCH_CURRENCY,
   MERCH_PRODUCT_ORDER,
+  MERCH_PRODUCT_THUMBNAILS,
   MERCH_SIZES,
 } from '@/lib/config/merch'
 import type {
@@ -74,7 +75,7 @@ export async function listProducts(): Promise<PrintfulProductSummary[]> {
     .map((product) => ({
       id: product.id,
       name: product.name,
-      thumbnailUrl: product.thumbnail_url,
+      thumbnailUrl: thumbnailOf(product.id, product.thumbnail_url),
       variantCount: product.variants,
     }))
 }
@@ -142,11 +143,16 @@ export async function getProduct(
   return {
     id: result.sync_product.id,
     name: result.sync_product.name,
-    thumbnailUrl: result.sync_product.thumbnail_url,
+    thumbnailUrl: thumbnailOf(result.sync_product.id, result.sync_product.thumbnail_url),
     variants: (result.sync_variants ?? [])
       .filter((raw) => !raw.is_ignored && isOfferedSize(productId, raw.size ?? null))
       .map(toVariant),
   }
+}
+
+/** The picture that stands for a product, which the shop may override. */
+function thumbnailOf(productId: number, printfulUrl: string): string {
+  return MERCH_PRODUCT_THUMBNAILS[productId] ?? printfulUrl
 }
 
 /**
