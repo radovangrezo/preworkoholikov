@@ -14,18 +14,6 @@ export const MERCH_EXTRA_MOCKUPS: Record<string, Record<string, string[]>> = {
       "/images/merch/456510998/soft-pink-2-164be9cb.jpg"
     ]
   },
-  "456511047": {
-    "White": [
-      "/images/merch/456511047/white-1-5ea90765.jpg",
-      "/images/merch/456511047/white-2-c46a2fcf.jpg"
-    ]
-  },
-  "456511237": {
-    "Black": [
-      "/images/merch/456511237/black-1-05e9f521.jpg",
-      "/images/merch/456511237/black-2-bf82c637.jpg"
-    ]
-  },
   "456511345": {
     "Black": [
       "/images/merch/456511345/black-1-de5c9555.jpg",
@@ -62,6 +50,44 @@ export const MERCH_EXTRA_MOCKUPS: Record<string, Record<string, string[]>> = {
     "Black": [
       "/images/merch/456511426/black-1-1a86e440.jpg",
       "/images/merch/456511426/black-2-7c0425dc.jpg"
+    ]
+  },
+  "459911365": {
+    "White": [
+      "/images/merch/459911365/white-1-80c05f72.jpg",
+      "/images/merch/459911365/white-2-d8ff7a45.jpg"
+    ]
+  },
+  "459911463": {
+    "Black": [
+      "/images/merch/459911463/black-1-6fbd25cc.jpg",
+      "/images/merch/459911463/black-2-eed302f8.jpg"
+    ]
+  },
+  "459911572": {
+    "Black": [
+      "/images/merch/459911572/black-1-76b1d5ff.jpg",
+      "/images/merch/459911572/black-2-511d7dc8.jpg"
+    ]
+  },
+  "459911578": {
+    "Black": [
+      "/images/merch/459911578/black-1-c97802c8.jpg",
+      "/images/merch/459911578/black-2-92b1baa8.jpg"
+    ]
+  },
+  "459911597": {
+    "Black": [
+      "/images/merch/459911597/black-1-4b1ab492.jpg",
+      "/images/merch/459911597/black-2-682f6075.jpg"
+    ],
+    "Navy": [
+      "/images/merch/459911597/navy-1-343ea2d7.jpg",
+      "/images/merch/459911597/navy-2-5a5b3823.jpg"
+    ],
+    "Red": [
+      "/images/merch/459911597/red-1-907160b0.jpg",
+      "/images/merch/459911597/red-2-ae1a9eed.jpg"
     ]
   }
 }
