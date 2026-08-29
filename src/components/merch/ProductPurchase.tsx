@@ -1,9 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ProductGallery } from '@/components/merch/ProductGallery'
 import { useCart } from '@/components/merch/useCart'
+import { metaContent } from '@/lib/analytics/meta-events'
+import { trackMetaEvent } from '@/lib/analytics/meta-pixel'
+import { META_EVENT } from '@/lib/config/analytics'
 import { MAX_MERCH_ITEM_QUANTITY } from '@/lib/config/merch'
 import { productImages } from '@/lib/merch/gallery'
 import { inMillilitres, isVolume } from '@/lib/merch/sizes'
@@ -59,6 +62,20 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
   const [added, setAdded] = useState(false)
   const { add } = useCart()
 
+  // A visit to a product page is a view of that product. The variant offered first stands
+  // for it, the same one whose price the heading quotes.
+  useEffect(() => {
+    const [first] = available
+    if (!first) return
+
+    trackMetaEvent({
+      name: META_EVENT.viewContent,
+      contents: [metaContent(first.syncVariantId, 1, first.priceCents)],
+      valueCents: first.priceCents,
+      contentName: product.name,
+    })
+  }, [available, product.name])
+
   function changeColor(nextColor: string) {
     setColor(nextColor)
     // A colour need not come in the same sizes, so anything it lacks falls back.
@@ -98,7 +115,8 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
       else lines.set(variant.syncVariantId, { variant, quantity: 1 })
     }
 
-    for (const { variant, quantity } of lines.values()) {
+    const addedLines = [...lines.values()]
+    for (const { variant, quantity } of addedLines) {
       add({
         syncVariantId: variant.syncVariantId,
         quantity,
@@ -111,7 +129,21 @@ export function ProductPurchase({ product }: { product: PrintfulProduct }) {
       })
     }
 
-    setAdded(lines.size > 0)
+    if (addedLines.length > 0) {
+      trackMetaEvent({
+        name: META_EVENT.addToCart,
+        contents: addedLines.map(({ variant, quantity }) =>
+          metaContent(variant.syncVariantId, quantity, variant.priceCents),
+        ),
+        valueCents: addedLines.reduce(
+          (total, { variant, quantity }) => total + variant.priceCents * quantity,
+          0,
+        ),
+        contentName: product.name,
+      })
+    }
+
+    setAdded(addedLines.length > 0)
   }
 
   const images = useMemo(() => productImages(product, selected), [product, selected])

@@ -4,6 +4,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { useCart } from '@/components/merch/useCart'
+import { metaContent } from '@/lib/analytics/meta-events'
+import { trackMetaEvent } from '@/lib/analytics/meta-pixel'
+import { META_EVENT } from '@/lib/config/analytics'
 import { COUNTRIES, COUNTRY_LABELS } from '@/lib/config/commerce'
 import { MAX_MERCH_ITEM_QUANTITY } from '@/lib/config/merch'
 import { inMillilitres } from '@/lib/merch/sizes'
@@ -71,6 +74,24 @@ export function CartCheckout() {
 
   // Identifies the latest quote request so a slow earlier one cannot overwrite it.
   const quoteRequestId = useRef(0)
+
+  // This page is the whole merch checkout, so opening it with something in the basket is
+  // entering the flow. The cart is read from localStorage after mount, hence the wait; the
+  // guard keeps changing a quantity here from starting the checkout all over again.
+  const reportedCheckout = useRef(false)
+  useEffect(() => {
+    if (reportedCheckout.current || lines.length === 0) return
+    reportedCheckout.current = true
+
+    trackMetaEvent({
+      name: META_EVENT.initiateCheckout,
+      contents: lines.map((line) =>
+        metaContent(line.syncVariantId, line.quantity, line.priceCents),
+      ),
+      // Shipping is not known until an address is filled in, so this is the basket alone.
+      valueCents: subtotalCents,
+    })
+  }, [lines, subtotalCents])
 
   const payload = {
     lines: lines.map((line) => ({ syncVariantId: line.syncVariantId, quantity: line.quantity })),

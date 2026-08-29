@@ -6,6 +6,35 @@ export const META_PIXEL_ID = '1584238096408590'
 
 export const META_PIXEL_SCRIPT_SRC = 'https://connect.facebook.net/en_US/fbevents.js'
 
+/** The standard events the shop reports, spelled the way Meta expects them. */
+export const META_EVENT = {
+  pageView: 'PageView',
+  viewContent: 'ViewContent',
+  addToCart: 'AddToCart',
+  initiateCheckout: 'InitiateCheckout',
+  purchase: 'Purchase',
+} as const
+
+export type MetaEventName = (typeof META_EVENT)[keyof typeof META_EVENT]
+
+/** Every id we send names one buyable item rather than a group of them. */
+export const META_CONTENT_TYPE = 'product'
+
+/**
+ * Meta counts num_items only on the events that describe a whole basket. Sending it on the
+ * others is reported back as an unsupported parameter, so the payload leaves it out.
+ */
+export const META_BASKET_EVENTS: readonly MetaEventName[] = [
+  META_EVENT.initiateCheckout,
+  META_EVENT.purchase,
+]
+
+/**
+ * How many events may wait for the pixel to load before the oldest are dropped. Bounds a
+ * visitor who browses on without ever answering the cookie banner.
+ */
+export const MAX_QUEUED_META_EVENTS = 20
+
 /**
  * Meta's <noscript> fallback image is deliberately absent: consent is stored in the
  * browser and read with JavaScript, so a visitor without it can never have granted any.

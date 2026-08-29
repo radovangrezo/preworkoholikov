@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { MetaEvent } from '@/components/analytics/MetaEvent'
 import { ClearCartOnMount } from '@/components/merch/ClearCartOnMount'
+import { metaContent } from '@/lib/analytics/meta-events'
+import { META_EVENT } from '@/lib/config/analytics'
 import { MERCH_ORDER_STATUS } from '@/lib/config/merch'
 import { getMerchOrderByPublicToken } from '@/lib/merch/repository'
 import { inMillilitres } from '@/lib/merch/sizes'
@@ -51,6 +54,19 @@ function OrderSummary({ result }: { result: MerchOrderWithItems }) {
 
   return (
     <>
+      {/* Same as the book's thank-you page: the order number is the event id, so a reload
+          cannot report this purchase a second time. */}
+      <MetaEvent
+        event={{
+          name: META_EVENT.purchase,
+          contents: items.map((item) =>
+            metaContent(item.sync_variant_id, item.quantity, item.unit_price_cents),
+          ),
+          valueCents: order.total_cents,
+          eventId: order.order_number,
+        }}
+      />
+
       <p className="mt-4 text-lg text-black">
         Objednávka <strong>{order.order_number}</strong>
         {isPaid

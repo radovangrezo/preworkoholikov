@@ -1,6 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { MetaEvent } from '@/components/analytics/MetaEvent'
 import { MerchTeaser } from '@/components/merch/MerchTeaser'
+import { metaContent } from '@/lib/analytics/meta-events'
+import { META_EVENT } from '@/lib/config/analytics'
+import { PRODUCT } from '@/lib/config/commerce'
 import { IMAGES } from '@/lib/images'
 import {
   availabilitySchema,
@@ -158,6 +162,17 @@ export default function Page() {
           __html: JSON.stringify(buildStructuredData()).replace(/</g, '\\u003c'),
         }}
       />
+
+      {/* The page the book is sold from, so a visit to it is a view of the product. */}
+      <MetaEvent
+        event={{
+          name: META_EVENT.viewContent,
+          contents: [metaContent(PRODUCT.sku, 1, PRODUCT.unitPriceCents)],
+          valueCents: PRODUCT.unitPriceCents,
+          contentName: BOOK.title,
+        }}
+      />
+
       <h1 className="sr-only">
         {BOOK.title} – kniha od {BOOK.authorGenitive}
       </h1>

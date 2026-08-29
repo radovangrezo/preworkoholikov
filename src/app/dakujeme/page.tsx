@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { MetaEvent } from '@/components/analytics/MetaEvent'
+import { metaContent } from '@/lib/analytics/meta-events'
+import { META_EVENT } from '@/lib/config/analytics'
 import { DELIVERY_LABELS, ORDER_STATUS } from '@/lib/config/commerce'
 import { IMAGES } from '@/lib/images'
 import { formatEur } from '@/lib/money'
@@ -61,6 +64,20 @@ function OrderSummary({ result }: { result: OrderWithItems }) {
 
   return (
     <>
+      {/* Stripe sends the customer here only after paying, so the order is real. The order
+          number rides along as the event id: Meta drops a repeat of one it has seen, so
+          reloading this page cannot count the same purchase twice. */}
+      <MetaEvent
+        event={{
+          name: META_EVENT.purchase,
+          contents: items.map((item) =>
+            metaContent(item.sku, item.quantity, item.unit_price_cents),
+          ),
+          valueCents: order.total_cents,
+          eventId: order.order_number,
+        }}
+      />
+
       <p className="mt-4 text-lg text-black">
         Objednávka <strong>{order.order_number}</strong>
         {isPaid

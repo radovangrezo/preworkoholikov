@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CheckoutForm } from './CheckoutForm'
-import { MAX_QUANTITY_PER_ORDER } from '@/lib/config/commerce'
+import { MetaEvent } from '@/components/analytics/MetaEvent'
+import { metaContent } from '@/lib/analytics/meta-events'
+import { META_EVENT } from '@/lib/config/analytics'
+import { MAX_QUANTITY_PER_ORDER, PRODUCT } from '@/lib/config/commerce'
 import { getAvailableStock } from '@/lib/orders/repository'
 import { BOOK } from '@/lib/site'
 
@@ -50,6 +53,17 @@ export default async function CheckoutPage({
 
         {available > 0 ? (
           <div className="mt-8">
+            {/* Reaching a checkout that can be used is entering the flow. The quantity is
+                the one the form opens on; what was actually bought is reported by the
+                Purchase event on the thank-you page. */}
+            <MetaEvent
+              event={{
+                name: META_EVENT.initiateCheckout,
+                contents: [metaContent(PRODUCT.sku, 1, PRODUCT.unitPriceCents)],
+                valueCents: PRODUCT.unitPriceCents,
+                contentName: BOOK.title,
+              }}
+            />
             <CheckoutForm
               packetaApiKey={process.env.NEXT_PUBLIC_PACKETA_API_KEY ?? ''}
               maxQuantity={Math.min(MAX_QUANTITY_PER_ORDER, available)}
