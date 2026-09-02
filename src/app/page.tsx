@@ -1,11 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { BookSample } from '@/components/BookSample'
 import { MetaEvent } from '@/components/analytics/MetaEvent'
 import { MerchTeaser } from '@/components/merch/MerchTeaser'
 import { metaContent } from '@/lib/analytics/meta-events'
 import { META_EVENT } from '@/lib/config/analytics'
 import { PRODUCT } from '@/lib/config/commerce'
 import { IMAGES } from '@/lib/images'
+import { SAMPLE_PAGES } from '@/lib/sample/pages'
 import {
   availabilitySchema,
   BOOK,
@@ -50,6 +52,10 @@ const FAQ = [
     question: `O čom je kniha ${BOOK.title}?`,
     answer:
       'Je to zbierka 42 krátkych satirických príbehov o práci a korporátnom živote – o kariére, poradách, manažéroch, mzdách aj firemných hodnotách. S humorom hovorí to, čo si o práci myslíme, ale nahlas nepovieme.',
+  },
+  {
+    question: 'Môžem si prečítať ukážku z knihy?',
+    answer: `Áno. Priamo na tejto stránke si prelistujete ${SAMPLE_PAGES.length} strán z knihy – obsah, šesť celých rozprávok aj ilustrácie. Nič sa nesťahuje, číta sa to v prehliadači.`,
   },
   {
     question: 'Pre koho je kniha určená?',
@@ -297,6 +303,20 @@ export default function Page() {
               <li>a mnoho ďalšieho.</li>
             </ul>
           </div>
+        </div>
+      </section>
+
+      {/* Sample reader */}
+      <section id="ukazka" className="bg-cream py-10 md:py-12">
+        <div className="mx-auto max-w-[900px] px-8 text-center">
+          <h2 className="text-2xl md:text-[32px] font-bold text-black">Prelistujte si ukážku</h2>
+          <p className="mt-3 text-base md:text-lg text-black">
+            {SAMPLE_PAGES.length} strán z knihy priamo v prehliadači – obsah, šesť celých rozprávok
+            aj ilustrácie.
+          </p>
+        </div>
+        <div className="mt-8">
+          <BookSample />
         </div>
       </section>
 

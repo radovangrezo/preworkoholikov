@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "packeta:carriers": "node --env-file=.env.local scripts/packeta-carriers.mjs",
-    "merch:mockups": "node --env-file=.env.local scripts/merch-mockups.mjs"
+    "merch:mockups": "node --env-file=.env.local scripts/merch-mockups.mjs",
+    "book:sample": "node scripts/book-sample.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
@@ -25,6 +26,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
